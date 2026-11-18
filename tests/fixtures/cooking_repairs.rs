@@ -1,0 +1,540 @@
+//! Pinned PyBot callback results with the documented cooking safety replacements.
+
+pub(super) const CASES: &[(&str, &str, Option<&str>)] = &[
+    (
+        "fix-falls-apart",
+        "my fish pie is falling apart",
+        Some(
+            "A fish pie comes apart because the sauce is thin, not because the fish broke: make the white sauce thick enough to hold a spoon (about 40g butter and 40g flour to 400ml milk) and let the pie stand 10 minutes out of the oven before you cut it, so the starch sets. A crumble or a pastry lid that slides off is the same fault - too much liquid under the crust.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "why does a fillet fall apart",
+        Some(
+            "A fillet comes apart for two reasons: it went into the pan wet, so it steamed instead of sealing, or it was moved before the skin had set. Dry it with kitchen paper, get the pan properly hot, lay it in skin side down, press it flat for ten seconds and leave it four minutes before you turn it once. A fillet that still breaks up was probably overcooked, so take it out when the flesh is opaque and the thickest part flakes easily.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "the salmon fell apart",
+        Some(
+            "Pat the fillet dry with kitchen paper and get the pan properly hot before it goes in: wet fish on a cool pan steams instead of sealing, and that is what makes it break up. Lay it in skin side down, press it flat for ten seconds, then leave it alone for four minutes - it releases itself when the skin has set - turn once and give it two more, and take it out when the flesh is opaque and the thickest part flakes easily. Baking at 200C (180C fan) for 12 to 15 minutes on baking paper is the gentler way, and a fish stew is meant to break up: stir it in at the end.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "my meatballs are breaking up",
+        Some(
+            "Something ground and shaped needs a binder and a rest: one egg and a handful of breadcrumbs per 500g, mix it just until it holds - overworking makes it springy - then chill it 20 minutes before it meets the pan, because cold holds together and warm does not. Sear it in a hot pan without moving it for two minutes a side so a crust forms, then finish it in a 200C oven rather than turning it again. If it contains minced meat, check that the centre stays at 70°C or above for 2 minutes. Too lean a mince is the other cause: 20% fat is what keeps it in one piece.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "my halloumi fell apart",
+        Some(
+            "Press the water out first: wrap the block in a clean tea towel with a weight on it for 15 minutes, then dust it in cornflour before it goes in the pan. That dry coat is what holds a crust together, and a hot pan with a little oil that you leave alone for three minutes does the rest. In a stir-fry, add it last and fold rather than stir.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "my mash falls apart",
+        Some(
+            "Floury potatoes break up and waxy ones hold their shape, so buy the right one: Maris Piper or King Edward for mash and roast, Charlotte or Jersey Royal for a salad or a tray of boiled ones. Cut them the same size, cook them from cold water at a bare simmer rather than a rolling boil, and drain them in a colander for a minute to steam dry before they go in the oven.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "my dumplings fell apart",
+        Some(
+            "A dumpling falls apart when the dough is too wet or the pot is at a rolling boil: use 100g of suet to 200g of self-raising flour with just enough cold water to bring it together, drop them onto the stew, put the lid on and keep it at a bare simmer for 20 minutes without lifting the lid. Gnocchi want the same gentle heat, and they are done a minute after they float.",
+        ),
+    ),
+    ("fix-falls-apart", "the muffin crumbles", None),
+    (
+        "fix-falls-apart",
+        "the roast chicken is falling apart",
+        Some(
+            "Coming apart is how you know it is done: a shoulder or brisket is tender when it pulls apart with no resistance. For chicken, use a clean thermometer and check that the thickest part stays at 70°C or above for 2 minutes. If it is coming apart before it is cooked through, the heat was too high - turn it down to 150C (130C fan), add a splash of water to the tin and give it another hour covered, because slow and low is what turns the connective tissue to gelatine rather than drying the meat out.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "the stew falls apart",
+        Some(
+            "Nothing has gone wrong: a stew, a braise and a slow-cooked shoulder are meant to come apart, and that is the sign the connective tissue has turned to gelatine. A shoulder at 150C takes 3 to 4 hours; if it is coming apart before you want it to, take it off the heat 20 minutes early and let it sit covered, or lift the pieces out and reduce the liquid on its own.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "how long until it comes apart",
+        Some(
+            "Nothing has gone wrong if it is a stew, a braise or a slow-cooked shoulder: they are meant to come apart, and that is the connective tissue turning to gelatine. A shoulder at 150C takes 3 to 4 hours. If it is breaking up before you want it to, take it off the heat early and let it sit covered.",
+        ),
+    ),
+    ("fix-falls-apart", "my porridge broke up", None),
+    (
+        "fix-falls-apart",
+        "why does it fall apart",
+        Some(
+            "It is nearly always one of two things: it was cooked too long, so what held it together gave up, or it was turned and moved before it had a crust to hold onto. Take it off the heat a little earlier next time and leave it alone in the pan until it releases itself.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "it is crumbling",
+        Some(
+            "Handle it less and cook it a little less: food comes apart when it is overcooked, or when it is moved in the pan before it has sealed. Dry the surface, get the pan hot, leave it alone until it releases itself, and turn it once. If it is already in pieces, a bake, a soup or a sauce is the way to serve it rather than a plate.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "my baked fish pie with potatoes fell apart",
+        Some(
+            "A fish pie comes apart because the sauce is thin, not because the fish broke: make the white sauce thick enough to hold a spoon (about 40g butter and 40g flour to 400ml milk) and let the pie stand 10 minutes out of the oven before you cut it, so the starch sets. A crumble or a pastry lid that slides off is the same fault - too much liquid under the crust.",
+        ),
+    ),
+    (
+        "fix-falls-apart",
+        "my fishmonger says it fell apart",
+        Some(
+            "Pat the fillet dry with kitchen paper and get the pan properly hot before it goes in: wet fish on a cool pan steams instead of sealing, and that is what makes it break up. Lay it in skin side down, press it flat for ten seconds, then leave it alone for four minutes - it releases itself when the skin has set - turn once and give it two more, and take it out when the flesh is opaque and the thickest part flakes easily. Baking at 200C (180C fan) for 12 to 15 minutes on baking paper is the gentler way, and a fish stew is meant to break up: stir it in at the end.",
+        ),
+    ),
+    (
+        "egg-dish-fault",
+        "my creme anglaise curdled",
+        Some(
+            "A grainy or split creme anglaise has curdled, because the eggs went above about 82C. Take it off the heat at once, whisk in a splash of cold milk to stop it cooking, then strain it through a sieve and it comes back smooth. Next time cook it over a low heat, stirring all the time, and pull it off as soon as it coats the back of the spoon.",
+        ),
+    ),
+    ("egg-dish-fault", "my custard sauce is watery", None),
+    (
+        "egg-dish-fault",
+        "my quiche is rubbery",
+        Some(
+            "A rubbery quiche is a custard that stayed in too long: the filling is firm at about 80C, so bake it at 180C for 30 to 35 minutes, until the middle still has a slight wobble, and let it cool for 20 minutes, because it firms as it stands. Two eggs to 200ml of double cream in a 20cm tin sets soft; more egg than that sets like rubber.",
+        ),
+    ),
+    ("egg-dish-fault", "the quiche was watery", None),
+    (
+        "egg-dish-fault",
+        "why is my fried egg tough",
+        Some(
+            "Fried eggs go rubbery when the white sets hard before the yolk is warm: cook them on a medium heat with a lid on for 2 to 3 minutes, so the top sets in the steam, and take them out while the yolk still wobbles. On a high heat the white blisters and toughens long before the yolk is hot.",
+        ),
+    ),
+    (
+        "egg-dish-fault",
+        "my omelette fell apart",
+        Some(
+            "An omelette tears when the eggs are too thin for the pan, so use a 20cm pan and no more than three eggs, let the base set for 45 seconds before you fold, and fold it with a spatula in the pan instead of lifting it out. A frittata is finished under the grill and never folded, which is the same dish without the part that breaks.",
+        ),
+    ),
+    (
+        "egg-dish-fault",
+        "my frittata is soggy and chewy",
+        Some(
+            "An omelette or frittata that stays wet is a vegetable problem: mushrooms, courgette, spinach and onion all give out water as they cook. Fry them first, on their own, until their water has gone and they are starting to colour, and let them cool a little before the eggs go in. A pinch of salt in the beaten egg also helps it set.",
+        ),
+    ),
+    (
+        "egg-dish-fault",
+        "my omelette is leathery",
+        Some(
+            "An omelette goes rubbery from the pan and the clock rather than the eggs: a 20cm pan on a medium heat, two beaten eggs with a pinch of salt, and pull the set edges into the middle for 60 to 90 seconds, then fold and slide it out while the top still looks a little wet. A small pan steams it instead of setting it, and one more minute is enough to make it leathery.",
+        ),
+    ),
+    ("egg-dish-fault", "my omelette is hot", None),
+    (
+        "fix-undercooked",
+        "my sourdough loaf is raw in the middle",
+        Some(
+            "A doughy loaf has not had long enough in the oven, or it did not prove enough: put it back in at 200C (180C fan) for 10 minutes, then turn it out and tap the base - a hollow sound means it is done, a dull thud means it wants 5 more. Next time let it prove until a poke springs back slowly and bake it to 96C in the middle rather than trusting the time on the packet.",
+        ),
+    ),
+    (
+        "fix-undercooked",
+        "my sponge is wet in the middle",
+        Some(
+            "Put it back in the oven at 160C (140C fan) for 10 minutes with a sheet of foil loosely over the top, so the middle catches up without the top burning, and test it again with a skewer: it wants a few damp crumbs, not wet mixture. Next time drop the oven 10C and give it 5 minutes longer, and check with a skewer before you take it out - a cake that looks set and wobbles in the middle is not done.",
+        ),
+    ),
+    (
+        "fix-undercooked",
+        "my gnocchi is hard in the middle",
+        Some(
+            "It wants more time and a little more water: a splash of hot water, the lid back on and 5 minutes on the lowest heat will finish rice, couscous or quinoa. Pasta and noodles go back into the boiling water for 2 to 3 minutes, and lentils want another 10. Taste a piece rather than looking at the clock, because the packet time assumes a pan that came back to the boil quickly.",
+        ),
+    ),
+    (
+        "fix-undercooked",
+        "my carrots are still crunchy",
+        Some(
+            "Boiled vegetables go hard in the middle when the pieces are different sizes or the water never got back to a rolling boil: cut them the same size, salt the water, and give them another 5 minutes, testing with the point of a knife - it should slide in with no resistance at all. Roast ones want 10 more minutes in a hotter oven, and parboiling potatoes for 8 minutes before they go in the tin stops the hard centre.",
+        ),
+    ),
+    (
+        "fix-undercooked",
+        "it is not cooked through",
+        Some(
+            "It needs a few more minutes rather than more heat: cover it and give it 5, then test it with a knife or a skewer in the middle, where the heat gets last. A wider, shallower dish cooks through faster than a deep one.",
+        ),
+    ),
+    (
+        "fix-greasy",
+        "my chips are so greasy",
+        Some(
+            "Greasy fried food means the oil was not hot enough, so the food steamed instead of sealing and took the fat up like a sponge: aim below 175°C for chips and cook them to a golden-yellow colour. Use a thermometer and follow the recipe for batter. Fry in small batches and turn off the heat if the oil starts smoking. Drain on a rack or kitchen paper, never on a plate, and salt it the moment it comes out.",
+        ),
+    ),
+    (
+        "fix-greasy",
+        "my roast potatoes are oily",
+        Some(
+            "Greasy roast potatoes mean the oil was not hot enough or the tin was crowded: parboil them 8 minutes, drain and shake the pan to rough the edges, then roast them in a thin layer of oil that is hot and shimmering. If the oil starts smoking, turn off the heat and let it cool. Roast at 200C (180C fan), in one layer with room between the potatoes. Cold oil, or a full tin, is what leaves them oily, and a rack over the tin drains the rest.",
+        ),
+    ),
+    (
+        "fix-greasy",
+        "the pastry case is greasy",
+        Some(
+            "A greasy pastry case is the filling rather than the pastry: cheese in a quiche gives up its fat, and mince in a pie floats it to the top. Drain the cooked filling in a sieve over a bowl, thicken it with a spoon of cornflour, and blind-bake the case first so the fat has somewhere to go; a layer of breadcrumbs on the base soaks up the rest.",
+        ),
+    ),
+    (
+        "fix-greasy",
+        "my roast chicken is greasy",
+        Some(
+            "Most of that fat is meant to be there, so spoon it off rather than cook it away: tilt the tin and take the fat out with a spoon or a bulb baster, keeping a spoonful for the potatoes, and finish the meat uncovered at a higher heat for the last 10 minutes so the skin or the outside crisps. Resting it on a rack, not in the tin, keeps it out of the fat.",
+        ),
+    ),
+    (
+        "fix-greasy",
+        "the soup is too fatty",
+        Some(
+            "Skim the fat off the top with a spoon, or lay a piece of kitchen paper flat on the surface and lift it out - that takes the oil and leaves the sauce. A stew that is still greasy wants the lid off for 10 minutes, and a spoon of something sharp (lemon, vinegar, tomato puree) cuts through what is left. Next time brown the meat and pour the fat out of the pan before the liquid goes in.",
+        ),
+    ),
+    (
+        "fix-greasy",
+        "too oily",
+        Some(
+            "Greasy comes from too much oil or oil that was not hot enough to seal the food: get the pan properly hot before anything goes in, shake the excess off in a sieve, and drain on kitchen paper rather than on a plate. In a sauce, skim the fat off the top with a spoon and finish with a squeeze of lemon.",
+        ),
+    ),
+    (
+        "bread-make",
+        "how do i bake bread from scratch",
+        Some(
+            "Put 500g strong white flour, 7g of dried yeast, 10g of salt and 320ml of warm water in a bowl, mix it to a sticky dough and knead 10 minutes until it stops tearing. Leave it somewhere warm 1 to 2 hours until it has doubled, shape it into a tin, leave it another 45 minutes, then bake at 220C (200C fan) for 30 to 35 minutes and tap the base: a hollow sound means it is done.",
+        ),
+    ),
+    (
+        "bread-make",
+        "how do i make a whole-wheat loaf",
+        Some(
+            "Use 500g of wholemeal flour (or 300g wholemeal flour and 200g strong white flour, which rises more easily), 7g of dried yeast, 10g of salt and 350ml of warm water: wholemeal drinks more and takes longer, so leave it somewhere warm 2 to 3 hours until it has doubled rather than 1 to 2. Knead 10 minutes, shape it into a tin, leave it 45 minutes more, then bake at 220C (200C fan) for 35 to 40 minutes and tap the base: a hollow sound means it is done.",
+        ),
+    ),
+    (
+        "bread-make",
+        "granary bread recipe",
+        Some(
+            "Use 500g of wholemeal flour (or 300g wholemeal flour and 200g strong white flour, which rises more easily), 7g of dried yeast, 10g of salt and 350ml of warm water: wholemeal drinks more and takes longer, so leave it somewhere warm 2 to 3 hours until it has doubled rather than 1 to 2. Knead 10 minutes, shape it into a tin, leave it 45 minutes more, then bake at 220C (200C fan) for 35 to 40 minutes and tap the base: a hollow sound means it is done.",
+        ),
+    ),
+    (
+        "flat-bake",
+        "my pancake batter came out flat",
+        Some(
+            "Flat pancakes are usually old baking powder or a batter that was beaten too much: use a fresh tin, stir until it is just combined, and let the batter rest 10 minutes before it hits the pan. A properly hot pan matters too - the first one is always the test.",
+        ),
+    ),
+    (
+        "flat-bake",
+        "how did my yorkshires come out flat",
+        Some(
+            "Yorkshire puddings want a hot tin and cold batter: put a little oil in each hole, heat it in a 220C oven until it shimmers, pour the batter in and don't open the door for 20 minutes.",
+        ),
+    ),
+    (
+        "flat-bake",
+        "my scones did not rise",
+        Some(
+            "Flat scones come from handling: keep the butter cold, rub it in quickly, pat the dough out rather than rolling it hard, and cut straight down with a sharp cutter so the edges stay free to rise.",
+        ),
+    ),
+    (
+        "flat-bake",
+        "my muffin came out flat",
+        Some(
+            "Something that came out flat is short of rise, because the baking powder was past its date, the flour was beaten after it went in, or the oven was not up to heat. Check the baking powder is in date (about half a teaspoon to 100g of flour), stop beating once the flour is in, and let the oven come fully up to heat before the tin goes in.",
+        ),
+    ),
+    (
+        "dip-fault",
+        "my hummus is runny",
+        Some(
+            "Watery houmous usually has too much liquid or not enough tahini: drain the chickpeas well, then stir in a spoonful of tahini and a little olive oil and chill it for 20 minutes, because it firms up cold. Taste for salt and lemon at the end.",
+        ),
+    ),
+    (
+        "dip-fault",
+        "my humous is too thick",
+        Some(
+            "Houmous thickens in the fridge, so loosen it with a spoonful of cold water or lemon juice and a little more oil, taste for salt, and serve it at room temperature.",
+        ),
+    ),
+    (
+        "dip-fault",
+        "my raita is thin",
+        Some(
+            "Sit it in a sieve over a bowl for twenty minutes: thin tzatziki or raita is nearly always a wet cucumber, so squeeze the grated cucumber dry and stir it back in with a pinch of salt.",
+        ),
+    ),
+    (
+        "dip-fault",
+        "my aioli split",
+        Some(
+            "A thin mayonnaise takes more oil whisked in slowly; a split one comes back from a fresh pasteurised yolk in a clean bowl with the split mixture drizzled in a few drops at a time.",
+        ),
+    ),
+    (
+        "dip-fault",
+        "my guacamole turned brown",
+        Some(
+            "Guacamole browns where the air gets at it: press cling film right onto the surface, keep the stone in the bowl if you have one, and a squeeze of lime slows it down. Browning alone comes from air exposure. Keep it refrigerated and follow the use-by date or the recipe’s storage guidance.",
+        ),
+    ),
+    (
+        "dip-fault",
+        "my salsa is watery",
+        Some(
+            "Drain the chopped tomato in a sieve for ten minutes and salt it at the end: salsa goes watery from the tomato juice, and a spoonful of tomato puree thickens what is left.",
+        ),
+    ),
+    (
+        "dip-fault",
+        "my baba ganoush is too thick",
+        Some(
+            "It wants balancing rather than more of anything: a squeeze of lemon and a little olive oil stirred in slowly will loosen it, and salt and lemon are what it usually lacks.",
+        ),
+    ),
+    (
+        "dip-fault",
+        "my dip is runny",
+        Some(
+            "A cold dip is put right cold, so leave the pan alone: a spoonful of water or lemon loosens it, a pinch of salt and twenty minutes in a sieve thickens it, and a little oil whisked in slowly brings back one that has split.",
+        ),
+    ),
+    ("bake-burning", "my cake tin has burnt on bits", None),
+    (
+        "bake-burning",
+        "my bread burns underneath",
+        Some(
+            "Lift the shelf up one, slide a baking sheet or two under the tin to take the direct heat and drop the oven 10C, because a bottom that burns first means too much heat from underneath and a hot oven burns the base while the middle is still wet. Line a dark or thin tin with baking paper, and turn the tin if one corner of the oven browns hard. If the top is browning before the middle is set, lay a sheet of foil loosely over it so the base can catch up. If the bottom has already caught, discard blackened portions, and check the oven once with a thermometer, since most run 10 to 20C hotter than the dial says.",
+        ),
+    ),
+    (
+        "bake-burning",
+        "why does my cake burn",
+        Some(
+            "Lay a sheet of foil loosely over the top as soon as it starts to colour, and turn the oven down 10 to 20C (or move the tin a shelf lower): a cake that catches on top is nearly always an oven running hot, a shelf too high or a dark tin, not the mixture. If the top is brown and the middle still wobbles, cover it and give it another 10 to 15 minutes rather than turning the heat up. If the bottom is already black, discard blackened portions and check that the middle is cooked through - and next time check your oven with a thermometer, since most run 10 to 20C hotter than the dial says.",
+        ),
+    ),
+    (
+        "bake-burning",
+        "my cake caught on top",
+        Some(
+            "Discard heavily burnt or blackened portions once the bake has cooled. Aim for a golden-yellow colour or lighter when baking starchy foods such as bread. If the middle is still wet, cover the tin loosely with foil and give it another 10 to 15 minutes. Next time move the oven shelf down one and tent the tin with foil after 20 minutes, because a bake burns on top while the middle is still wet.",
+        ),
+    ),
+    (
+        "bake-burning",
+        "my cake burns all the time",
+        Some(
+            "Lay a sheet of foil loosely over the top as soon as it starts to colour, and turn the oven down 10 to 20C (or move the tin a shelf lower): a cake that catches on top is nearly always an oven running hot, a shelf too high or a dark tin, not the mixture. If the top is brown and the middle still wobbles, cover it and give it another 10 to 15 minutes rather than turning the heat up. If the bottom is already black, discard blackened portions and check that the middle is cooked through - and next time check your oven with a thermometer, since most run 10 to 20C hotter than the dial says.",
+        ),
+    ),
+    (
+        "fix-burnt",
+        "is burnt rice bad for you",
+        Some(
+            "Avoid eating heavily burnt or blackened food. To reduce acrylamide when cooking starchy foods such as bread or potatoes, aim for a golden-yellow colour or lighter. Follow the cooking directions on the packet and make sure any meat is cooked through as appropriate for the cut.",
+        ),
+    ),
+    (
+        "fix-burnt",
+        "my toad in the hole burnt",
+        Some(
+            "Discard blackened portions. Batter can burn if the fat was too hot or the tin sat too high. Next time put the tin on the middle shelf, get the fat hot but not smoking - a drop of batter should sizzle rather than spit - pour the batter in cold, and do not open the door for the first 20 minutes.",
+        ),
+    ),
+    (
+        "fix-burnt",
+        "the roast potatoes burnt",
+        Some(
+            "Discard blackened pieces. If the rest needs more time, use a fresh tray and finish at 20C lower until tender: a roast vegetable catches on the edges long before the middle. For potatoes and other starchy vegetables, aim for golden-yellow or lighter.",
+        ),
+    ),
+    (
+        "fix-burnt",
+        "my crackling burnt",
+        Some(
+            "Discard blackened portions. If the dish contains meat, check that it is cooked through before serving. If what is left is dry, spoon a little stock or gravy over it, and next time put it in later than the joint, so it gets less time at the heat.",
+        ),
+    ),
+    (
+        "fix-burnt",
+        "i burnt the roast in the oven",
+        Some(
+            "Take it out of the tin and carve or cut the black edge away rather than scraping at it, and check how well cooked the middle is before tasting. Leave the burnt fat and juices in the tin instead of pouring them into the gravy, and if the middle is still underdone, cover the joint with baking paper and return it to the oven at 20C lower until it is cooked through. Poultry and pork should reach 70°C or above for 2 minutes at the thickest part. Next time stand it on a rack or a bed of onion and carrot so it is not sitting in the tin, and cover it loosely once it has browned.",
+        ),
+    ),
+    (
+        "fix-burnt",
+        "i burnt my sauce in the pan",
+        Some(
+            "Take it off the heat and lift out the burnt bits rather than stirring them in, because the smoky taste spreads through everything. If it has gone all the way through, a splash of stock and something creamy hides a little of it, but a properly burnt sauce is better started again.",
+        ),
+    ),
+    ("fix-burnt", "my saucepan is burnt", None),
+    (
+        "fix-burnt",
+        "this dinner burnt",
+        Some(
+            "Take it off the heat and lift out the burnt bits rather than stirring them in, because the smoky taste spreads through everything. If it has gone all the way through, a splash of stock and something creamy hides a little of it, but a properly burnt sauce is better started again.",
+        ),
+    ),
+    (
+        "burnt-pan",
+        "is burnt food off a pan bad for me",
+        Some(
+            "Avoid eating heavily burnt or blackened food. To reduce acrylamide when cooking starchy foods such as bread or potatoes, aim for a golden-yellow colour or lighter. Follow the cooking directions on the packet and make sure any meat is cooked through as appropriate for the cut.",
+        ),
+    ),
+    ("burnt-pan", "my oven shelf is burnt", None),
+    ("burnt-pan", "my gyoza stuck to the pan", None),
+    (
+        "burnt-pan",
+        "i need to clean the burnt sauce off my pan",
+        Some(
+            "Put an inch of water and two tablespoons of bicarbonate of soda in it and simmer for ten minutes, then lift the burnt layer with a wooden spoon: almost nothing needs scrubbing after that. Stainless steel and enamel can take a vinegar soak instead, but never scour a non-stick pan, since it takes the coating off for good.",
+        ),
+    ),
+    ("burnt-pan", "my porridge burnt in the pan", None),
+    (
+        "burnt-pan",
+        "something is stuck to my pan",
+        Some(
+            "Put an inch of water and two tablespoons of bicarbonate of soda in it and simmer for ten minutes, then lift the burnt layer with a wooden spoon: almost nothing needs scrubbing after that. Stainless steel and enamel can take a vinegar soak instead, but never scour a non-stick pan, since it takes the coating off for good.",
+        ),
+    ),
+    (
+        "burnt-pan",
+        "my saucepan burnt black",
+        Some(
+            "Put an inch of water and two tablespoons of bicarbonate of soda in it and simmer for ten minutes, then lift the burnt layer with a wooden spoon: almost nothing needs scrubbing after that. Stainless steel and enamel can take a vinegar soak instead, but never scour a non-stick pan, since it takes the coating off for good.",
+        ),
+    ),
+    ("burnt-tin", "i burnt the potatoes in the baking tray", None),
+    (
+        "burnt-tin",
+        "will it scratch my burnt tin coating",
+        Some(
+            "Bicarbonate and a wooden spoon will not lift a non-stick coating - it is wire wool and metal scourers that do. If the coating is already scratched through to the metal, check the manufacturer’s guidance before using it again. Replace it if the coating is flaking.",
+        ),
+    ),
+    (
+        "burnt-tin",
+        "i have burnt food on my oven rack",
+        Some(
+            "Soak it in hot water and two tablespoons of bicarbonate of soda for half an hour - the bath if the shelf will not fit in the sink - then lift the burnt patches off with a plastic scourer or a ball of foil. Anything really black takes a paste of bicarbonate and water left on overnight. Dry it before it goes back in, and put a sheet of foil on the shelf under the tin next time, which is what catches the drips.",
+        ),
+    ),
+    (
+        "burnt-tin",
+        "burnt stuff is stuck on the baking tray",
+        Some(
+            "Soak it in the sink with hot water and two tablespoons of bicarbonate of soda for half an hour, then lift the burnt patches off with a wooden spoon or a plastic scourer. Anything really black takes a paste of bicarbonate and water left on overnight. Dry it properly before it goes away, and line it with baking paper next time, which is what stops it coming back.",
+        ),
+    ),
+    (
+        "burnt-tin",
+        "how to get burnt food off my cake tin",
+        Some(
+            "Soak it in the sink with hot water and two tablespoons of bicarbonate of soda for half an hour, then lift the burnt patches off with a wooden spoon or a plastic scourer: tins are thin and scouring takes the non-stick off for good. Anything really black takes a paste of bicarbonate and water left on overnight. Dry it properly before it goes away, and line it with baking paper next time, which is what stops it coming back.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "my microwave turntable cracked",
+        Some(
+            "Replace the part rather than the machine: a microwave plate or turntable ring is about £10 to £20 and sold by the model number on the sticker inside the door, or stamped on the plate itself. A cracked plate can shatter the next time it heats, so keep it out of the microwave until the new one comes.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "my blender jug has a crack",
+        Some(
+            "A cracked jug, blender jug or glass lid goes: it can let go all at once with something hot in it, and a crack you cannot scrub out of is not a food surface. Blenders and kettles take a spare jug or lid by model number. Use only parts designed for the appliance.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "a split through the cutting board",
+        Some(
+            "Sand it back and oil it if the split is shallow, because that closes the grain again; a crack that goes right through traps food where you cannot wash it out, and that board should go. Never soak a wooden board or put it in the dishwasher - wash it, stand it on edge to dry and oil it once a month.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "my enamel pan has chipped",
+        Some(
+            "A chip on the inside of an enamelled pan will rust and flake into the food, so that one is finished; a chip on the outside only matters for looks. Enamel repair paints are not food safe, so do not touch one in, and do not put an enamelled pan in the dishwasher, which is what chips the rim.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "my coating is peeling",
+        Some(
+            "Once the coating is flaking the pan is done: the flakes come off into the food and the bare metal scorches what it touches. Re-coating is not a home job, so replace it - and washing it by hand, never heating it empty and never scouring it are what make the next one last three to five years.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "my baking tin is bent",
+        Some(
+            "Stand it on the worktop and press it flat again with the heel of your hand: a baking tin that has bent in the wash still bakes the same, and the only thing you notice is the wobble. Set it on a flat baking sheet if the batter runs to one side. Replace it when the springform clip or the base no longer seats flat, because then it leaks.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "my frying pan rocks on the hob",
+        Some(
+            "Replace a pan that rocks or cannot sit securely on your hob. A warped pan can also heat unevenly on induction, ceramic or solid-plate hobs. Check it against a straight edge on the worktop. It cannot be flat again for certain, so a heavy-based pan is the replacement - thin ones go in one hot empty minute or a cold rinse in a hot pan.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "my kettle is cracked",
+        Some(
+            "A cracked kettle goes: water reaches the element and the connections, which is a shock risk rather than a leak to mop up. Unplug it and replace it - a new kettle is £15 to £30, and descaling the next one monthly is what keeps it from running hot.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "my slow cooker pot is cracked",
+        Some(
+            "Retire it if the crack is in the pot itself: stoneware fails right through when it heats, and a crack holds food you cannot wash out of it. Slow cooker inserts and casserole dishes are sold on their own by model number or size, £10 to £25. Use only an insert the manufacturer recommends for your slow cooker.",
+        ),
+    ),
+    (
+        "kit-damaged",
+        "the handle came off",
+        Some(
+            "If the crack is right through, replace it: a split pot, dish or plate holds food and bacteria where you cannot wash, and it can fail completely the next time it heats. A chip or crack on an outside face that never touches food can usually be lived with.",
+        ),
+    ),
+];

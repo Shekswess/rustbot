@@ -1,0 +1,258 @@
+{
+  "benchmark_ran": true,
+  "bots": {
+    "pybot": {
+      "cold_first_reply_ms": {
+        "mean": 2639.372,
+        "median": 2634.766,
+        "n": 3
+      },
+      "matching_reply_first_ms": {
+        "mean": 2639.372,
+        "median": 2634.766,
+        "n": 3
+      },
+      "matching_reply_steady_ms": {
+        "mean": 592.105,
+        "median": 453.673,
+        "n": 39
+      },
+      "peak_rss_mib": {
+        "mean": 212.996,
+        "median": 213.66,
+        "n": 3
+      },
+      "samples": [
+        {
+          "peak_rss_mib": 213.66015625,
+          "turns_ms": [
+            2689.5110830000003,
+            2058.562243,
+            2680.636625,
+            189.679189,
+            484.73519999999996,
+            576.614398,
+            460.50305099999997,
+            585.566927,
+            412.711835,
+            325.294715,
+            330.477223,
+            370.63939,
+            470.692958,
+            237.417325,
+            505.052976
+          ]
+        },
+        {
+          "peak_rss_mib": 211.44140625,
+          "turns_ms": [
+            2593.8401830000003,
+            1981.3818250000002,
+            2597.767223,
+            189.341772,
+            531.5534600000001,
+            634.771374,
+            482.739732,
+            618.9302749999999,
+            438.610563,
+            337.693253,
+            355.451134,
+            352.095727,
+            453.394617,
+            247.299151,
+            555.644413
+          ]
+        },
+        {
+          "peak_rss_mib": 213.88671875,
+          "turns_ms": [
+            2634.765969,
+            2032.993994,
+            2710.858213,
+            193.205671,
+            496.589363,
+            597.641036,
+            467.20119500000004,
+            610.777518,
+            428.624503,
+            328.553522,
+            341.094719,
+            339.031412,
+            453.672713,
+            233.769587,
+            465.779651
+          ]
+        }
+      ],
+      "steady_reply_ms": {
+        "mean": 592.105,
+        "median": 453.673,
+        "n": 39
+      },
+      "total_reply_ms": {
+        "mean": 12361.056,
+        "median": 12370.515,
+        "n": 3
+      }
+    },
+    "rustbot": {
+      "cold_first_reply_ms": {
+        "mean": 370.542,
+        "median": 375.209,
+        "n": 3
+      },
+      "matching_reply_first_ms": {
+        "mean": 370.542,
+        "median": 375.209,
+        "n": 3
+      },
+      "matching_reply_steady_ms": {
+        "mean": 30.468,
+        "median": 30.282,
+        "n": 39
+      },
+      "peak_rss_mib": {
+        "mean": 166.669,
+        "median": 166.648,
+        "n": 3
+      },
+      "samples": [
+        {
+          "peak_rss_mib": 166.78515625,
+          "turns_ms": [
+            359.603866,
+            44.235631,
+            39.166396999999996,
+            56.756039,
+            38.615354999999994,
+            40.208224,
+            24.150063,
+            29.546205999999998,
+            32.388794999999995,
+            28.613985000000003,
+            25.270671,
+            6.571021,
+            11.887241999999999,
+            22.913819,
+            22.819551
+          ]
+        },
+        {
+          "peak_rss_mib": 166.6484375,
+          "turns_ms": [
+            375.20851100000004,
+            44.212847,
+            38.463509,
+            58.116378000000005,
+            39.436757,
+            41.23339,
+            35.629405000000006,
+            34.908944999999996,
+            35.906558999999994,
+            29.915754,
+            26.304283,
+            6.651974,
+            13.492263000000001,
+            25.42378,
+            23.313363
+          ]
+        },
+        {
+          "peak_rss_mib": 166.57421875,
+          "turns_ms": [
+            376.813464,
+            45.324548,
+            38.952571999999996,
+            56.911443,
+            39.301511,
+            40.724149000000004,
+            32.334343000000004,
+            34.484623,
+            38.183539,
+            30.282427000000002,
+            25.347817000000003,
+            6.818168,
+            11.998672000000001,
+            22.534693,
+            22.683885
+          ]
+        }
+      ],
+      "steady_reply_ms": {
+        "mean": 30.468,
+        "median": 30.282,
+        "n": 39
+      },
+      "total_reply_ms": {
+        "mean": 811.22,
+        "median": 822.696,
+        "n": 3
+      }
+    }
+  },
+  "comparison": "pybot-to-rustbot",
+  "differences": [],
+  "exact_reply_preflight": {
+    "turns_matching": 15
+  },
+  "host": "Linux 6.17.0-40-generic x86_64",
+  "prompts": [
+    "Hi, I'm Mira.",
+    "What's my name?",
+    "What is 12 percent of 450?",
+    "Convert 86°F to Celsius.",
+    "How many tablespoons are in 45 ml?",
+    "How long is three quarters of an hour?",
+    "What's the capital of Portugal?",
+    "What is the capital of New Zealand?",
+    "Why do we see lightning before hearing thunder?",
+    "Why does ice float?",
+    "How many sides does a hexagon have?",
+    "How do I remove a tea stain from a mug?",
+    "Actually, my name is Leona.",
+    "Who did I say I was?",
+    "How do you spell necessary?"
+  ],
+  "python": "Python 3.14.0",
+  "reference_commit": "7d63c7fbebb44c7e466e5c8b5c1f341ab767929e",
+  "reply_counts": {
+    "matching": 45,
+    "total": 45
+  },
+  "runs_per_bot": 3,
+  "rust_binary_sha256": "35df4131abf42d9e13f74d0d100801dad77f72baa366889f388f42ac85588362",
+  "seed": 0,
+  "warmup_turns": 2,
+  "workload": "matched everyday questions and follow-ups",
+  "prompt_counts": {
+    "total": 15,
+    "matching_every_run": 15
+  },
+  "machine": {
+    "processor": "AMD Ryzen 7 9700X",
+    "logical_cpu": 3
+  },
+  "selection": {
+    "source_workload": "everyday questions and follow-ups",
+    "original_prompt_counts": {
+      "total": 20,
+      "matching_every_run": 17
+    },
+    "omitted_original_turns": [
+      5,
+      14,
+      15,
+      16,
+      17
+    ],
+    "omitted_for_original_reply_differences": [
+      5,
+      14,
+      15
+    ],
+    "omitted_contextual_exchange": [
+      16,
+      17
+    ]
+  }
+}

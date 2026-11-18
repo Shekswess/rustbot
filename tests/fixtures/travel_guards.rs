@@ -1,0 +1,135 @@
+//! Trip relevance guards sampled from the pinned PyBot release.
+
+pub(super) const CASES: &[(&str, &str, bool)] = &[
+    ("travel/book-a-flight", "ive booked a flight to rome", false),
+    (
+        "travel/book-a-flight",
+        "we booked the flights and now i wish we hadnt",
+        false,
+    ),
+    (
+        "travel/book-a-flight",
+        "how do i book a flight to rome",
+        true,
+    ),
+    ("travel/book-a-flight", "have you reserved a flight", true),
+    ("travel/book-a-flight", "where do I book", true),
+    (
+        "travel/package-or-diy",
+        "hire a builder or do it myself",
+        false,
+    ),
+    (
+        "travel/package-or-diy",
+        "should i book my holiday or do it myself",
+        true,
+    ),
+    (
+        "travel/package-or-diy",
+        "pick a package holiday or go diy",
+        true,
+    ),
+    (
+        "travel/package-or-diy",
+        "do i decorate the bathroom myself",
+        false,
+    ),
+    ("travel/package-or-diy", "flights and hotel together", true),
+    ("travel/package-or-diy", "i can do it myself", false),
+    (
+        "travel/camping-kit",
+        "what food should i bring camping",
+        false,
+    ),
+    ("travel/camping-kit", "how to pack for camping", true),
+    ("travel/camping-kit", "how do i carry food camping", false),
+    (
+        "travel/camping-kit",
+        "what snacks should i take hiking",
+        false,
+    ),
+    ("travel/camping-kit", "the campsite allows food", false),
+    ("travel/camping-kit", "want a stove for camping", true),
+    ("travel/camping-kit", "need a red sleeping bag", true),
+    ("travel/camping-kit", "what meals would you cook", false),
+    (
+        "travel/pack-warm-week",
+        "what food should i bring to the beach",
+        false,
+    ),
+    (
+        "travel/pack-warm-week",
+        "what should i pack for spain",
+        true,
+    ),
+    ("travel/pack-warm-week", "beach eats in july", true),
+    (
+        "travel/pack-warm-week",
+        "warm week in portugal with only a bag",
+        true,
+    ),
+    ("travel/pack-warm-week", "what kit for a hot country", true),
+    (
+        "travel/pack-warm-week",
+        "i am taking food to the beach",
+        false,
+    ),
+    (
+        "travel/train-journey-packing",
+        "what to pack for a long train journey",
+        true,
+    ),
+    (
+        "travel/train-journey-packing",
+        "i need a new coach for the living room",
+        false,
+    ),
+    (
+        "travel/train-journey-packing",
+        "what do i wear when i need to train harder",
+        false,
+    ),
+    (
+        "travel/train-journey-packing",
+        "training for a marathon",
+        false,
+    ),
+    (
+        "travel/train-journey-packing",
+        "a coach for the children to go to london",
+        false,
+    ),
+    (
+        "travel/train-journey-packing",
+        "packing for a long coach to manchester",
+        true,
+    ),
+    (
+        "travel/train-journey-packing",
+        "a coach for a football training session",
+        false,
+    ),
+    ("travel/train-journey-packing", "travelling by coach", true),
+    ("travel/train-journey-packing", "train to Manchester", true),
+    ("travel/an-easy-walk", "is there a flat walk near me", true),
+    (
+        "travel/an-easy-walk",
+        "how do i clear the junk out of my flat",
+        false,
+    ),
+    ("travel/an-easy-walk", "the bread came out flat", false),
+    ("travel/an-easy-walk", "my cake went really flat", false),
+    (
+        "travel/an-easy-walk",
+        "the path looked flat on the map",
+        true,
+    ),
+    ("travel/an-easy-walk", "a flat path past my flat", true),
+    ("travel/an-easy-walk", "long flat route with a pram", true),
+    ("travel/an-easy-walk", "it all turned out flat", false),
+    (
+        "travel/an-easy-walk",
+        "it all turned out flat along the terrain",
+        true,
+    ),
+];

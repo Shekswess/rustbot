@@ -1,0 +1,513 @@
+//! Direct source callback and guard fixtures from pinned PyBot 7d63c7f.
+
+use super::*;
+
+type Case = (
+    &'static str,
+    Option<&'static str>,
+    &'static str,
+    bool,
+    bool,
+    bool,
+);
+
+const CASES: &[Case] = &[
+    (
+        "What should I do this weekend?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "I have a day off, what should I do?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What shall we do Saturday?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do for an hour?",
+        None,
+        "For an hour, pick one thing you can finish inside it rather than a plan: a walk round the block with a podcast, one drawer or one shelf, a chapter, or the phone call you keep putting off. It ends when the hour does, which is the point. Are you on your own, or is someone with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do for one hour?",
+        None,
+        "For an hour, pick one thing you can finish inside it rather than a plan: a walk round the block with a podcast, one drawer or one shelf, a chapter, or the phone call you keep putting off. It ends when the hour does, which is the point. Are you on your own, or is someone with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do for two hours?",
+        None,
+        "For an hour, pick one thing you can finish inside it rather than a plan: a walk round the block with a podcast, one drawer or one shelf, a chapter, or the phone call you keep putting off. It ends when the hour does, which is the point. Are you on your own, or is someone with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do for three hours?",
+        None,
+        "For an hour, pick one thing you can finish inside it rather than a plan: a walk round the block with a podcast, one drawer or one shelf, a chapter, or the phone call you keep putting off. It ends when the hour does, which is the point. Are you on your own, or is someone with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do with a couple of hours?",
+        None,
+        "For an hour, pick one thing you can finish inside it rather than a plan: a walk round the block with a podcast, one drawer or one shelf, a chapter, or the phone call you keep putting off. It ends when the hour does, which is the point. Are you on your own, or is someone with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do for a few hours?",
+        None,
+        "For an hour, pick one thing you can finish inside it rather than a plan: a walk round the block with a podcast, one drawer or one shelf, a chapter, or the phone call you keep putting off. It ends when the hour does, which is the point. Are you on your own, or is someone with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do for half an hour?",
+        None,
+        "For an hour, pick one thing you can finish inside it rather than a plan: a walk round the block with a podcast, one drawer or one shelf, a chapter, or the phone call you keep putting off. It ends when the hour does, which is the point. Are you on your own, or is someone with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do for four hours?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do for 2 hours?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do for an afternoon?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "Any ideas for my spare hour?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "Any ideas for an-hour indoors?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "What should I do in Rome this weekend?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        false,
+        false,
+    ),
+    (
+        "What should I do in New York this weekend?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        false,
+        false,
+    ),
+    (
+        "What should I do in New-York this weekend?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        false,
+        false,
+    ),
+    (
+        "What should I do in Bath this weekend?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What can I do if I found cork in my bag?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        false,
+        false,
+    ),
+    (
+        "What should I do near Paris?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        false,
+        false,
+    ),
+    (
+        "What about parisian shops?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "Is it worth visiting Lisbon?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        false,
+        false,
+    ),
+    (
+        "Is it worth visiting Galway?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        false,
+        false,
+    ),
+    (
+        "What if I see Belfast2?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        false,
+        false,
+    ),
+    (
+        "Any ideas for a night in?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "A quiet night in.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "Ideas for a cozy evening?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "What about a night at home?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "Im staying in.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "We are staying in.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "Were staying in.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "Stay in this evening.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "Staying in.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "How long do stitches stay in?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "A night indoors?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "Can we do something at home?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "Day in?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "It is pouring. What can I do?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        true,
+    ),
+    (
+        "Any ideas for a wet day?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        true,
+    ),
+    (
+        "What can I do on a wet-weekend?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        true,
+    ),
+    (
+        "What can I do in the rain?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        true,
+    ),
+    (
+        "Want to go out while it is drizzling.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        true,
+    ),
+    (
+        "It is a downpour.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        true,
+    ),
+    (
+        "Can I do anything when it is wet out?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        true,
+    ),
+    (
+        "Wet clothing at home.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        true,
+        false,
+    ),
+    (
+        "Want a rainyday?",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "My son wets the bed.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "The wall is wet.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "Rainwater in my shed.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "A wet weatherproof coat.",
+        None,
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        true,
+    ),
+    (
+        "What about that?",
+        Some("what about that rain tonight"),
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What do I do?",
+        Some("what do i do lisbon for a weekend"),
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        false,
+        false,
+    ),
+    (
+        "Could I stay in?",
+        Some("could i stay in what about a night in"),
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "What do I do?",
+        Some("what do i do for an hour"),
+        "For an hour, pick one thing you can finish inside it rather than a plan: a walk round the block with a podcast, one drawer or one shelf, a chapter, or the phone call you keep putting off. It ends when the hour does, which is the point. Are you on your own, or is someone with you?",
+        true,
+        false,
+        false,
+    ),
+    (
+        "",
+        Some("is there anything to do on a wet day in rome"),
+        "One thing out of the house and one thing at home usually fills it. Out: a walk somewhere you have not been, a Saturday market, or a museum or gallery - most are free and good for an hour or two. Home: something to cook properly, a film, or a jigsaw with the radio on. Rain only moves the walk to a pool or a cinema. Is it just you, or is someone coming with you?",
+        false,
+        true,
+        true,
+    ),
+];
+
+#[test]
+fn spare_time_preserves_the_duration_city_and_explicit_weather_and_evening_guards() {
+    for &(raw, clean, reply, no_city_expected, evening, weather) in CASES {
+        let mut reading = Reading::new(raw);
+        if let Some(clean) = clean {
+            reading.line.clean = clean.to_owned();
+        }
+        assert_eq!(
+            spare_time(&reading).as_deref(),
+            Some(reply),
+            "{raw:?} {clean:?}"
+        );
+        assert_eq!(no_city(&reading), no_city_expected, "{raw:?} {clean:?}");
+        assert_eq!(names_evening(&reading), evening, "{raw:?} {clean:?}");
+        assert_eq!(names_weather(&reading), weather, "{raw:?} {clean:?}");
+    }
+}
+
+#[test]
+fn weekend_row_ranks_only_when_its_phrases_name_the_subject() {
+    use super::super::matched_id;
+    for line in [
+        "What can I do for an hour?",
+        "I have half an hour, what can I do?",
+        "What should I do with a couple of hours?",
+        "What to do this weekend?",
+    ] {
+        assert_eq!(
+            matched_id(&Reading::new(line)),
+            Some("weekend-do"),
+            "{line}"
+        );
+    }
+    for line in [
+        "What should I do this weekend?",
+        "What shall we do Saturday?",
+        "What should I do this weekend in Bath?",
+    ] {
+        assert_ne!(
+            matched_id(&Reading::new(line)),
+            Some("weekend-do"),
+            "{line}"
+        );
+    }
+    assert_eq!(
+        matched_id(&Reading::new("I have a free Saturday, what can I do?")),
+        Some("free-day-out")
+    );
+}

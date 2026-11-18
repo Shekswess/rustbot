@@ -1,0 +1,381 @@
+// Recognition tables and wording from bot/modules/safety.py and bot/knowledge/crisis_replies.py.
+patterns!(FALL_CORE,
+    r###"\b(?:fell|fallen|falling|tumbled|came\s+off|come\s+off)\s+(?:off|from|down)\s+(?:a\s+|the\s+|his\s+|her\s+|their\s+|my\s+)?(?:ladder|roof|scaffold\w*|stairs|steps|wall|cliff|horse|top\s+bunk|loft|roof\s+rack)\b"###,
+    r###"\b(?:fell|fallen|tumbled)\s+down\s+(?:the\s+|a\s+)?(?:stairs|steps|flight\s+of\s+stairs)\b"###,
+    r###"\b(?:fell|fallen|tumbled)\s+(?:off|from)\s+(?:a\s+|the\s+)?(?:trampoline|bike|swing|slide|climbing\s+frame|bunk\s+bed)\b[^.?!]{0,40}\b(?:head|neck|back|spine|unconscious|knocked\s+out|not\s+moving|isn'?t\s+moving|won'?t\s+wake|wont\s+wake|can'?t\s+feel|vomit\w*)\b"###,
+    r###"\b(?:fell|fallen|tripped)\b[^.?!]{0,30}\b(?:broke|broken|fractured)\s+(?:my|his|her|their)\s+(?:hip|pelvis|back|neck|skull|spine)\b"###,
+    r###"\b(?:hip|pelvis)\b[^.?!]{0,25}\b(?:looks?\s+(?:wrong|odd|out\s+of\s+place)|is\s+(?:out\s+of\s+place|deformed|mangled)|won'?t\s+bear\s+weight)\b"###,
+    r###"\b(?:fell|fallen|fall|slipped|tripped|collapsed)\b[^.?!]{0,25}\b(?:can'?t|cant|cannot|not\s+able\s+to|unable\s+to)\s+(?:get|getting|stand)\s*(?:\w+\s+)?(?:up|back\s+up)\b"###,
+    r###"\b(?:fell|fallen|fall|slipped|collapsed|fainted)\b[^.?!]{0,40}\b(?:still\s+(?:on\s+the\s+floor|lying|down)|(?:he|she|they)\s*(?:'s|s|\s+is|\s+are)\s+(?:still\s+)?(?:on\s+the\s+floor|lying\s+(?:there|on)))\b"###,
+    r###"\b(?:on\s+the\s+(?:floor|ground)|fell|fallen|slipped|collapsed)\b[^.?!]{0,35}\b(?:can'?t|cant|cannot|not|won'?t|wont)\s+(?:move|moving)\b"###,
+    r###"\b(?:my|his|her|their|the)\s+(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)\b[^.?!]{0,20}\b(?:can'?t|cant|cannot)\s+(?:move|feel\s+(?:his|her|their)\s+(?:legs?|arms?|body))\b"###,
+    r###"\b(?:can'?t|cant|cannot|unable\s+to|won'?t|wont)\s+(?:put|bear|take|stand\s+on)\s+(?:any\s+)?weight\b"###,
+    r###"\b(?:can'?t|cant|cannot|unable\s+to|won'?t|wont)\s+(?:put|bear|take|stand\s+on)\s+(?:any\s+)?weight\b"###,
+    r###"\b(?:fell|fallen|fall|slipped|collapsed|on\s+the\s+(?:floor|ground))\b[^.?!]{0,40}\b(?:can'?t|cant|cannot|not\s+able\s+to|unable\s+to|struggl\w+\s+to)\s+(?:lift|pick|get)\s+(?:her|him|them|my\s+(?:mum|mom|mother|dad|father|wife|husband|partner|nan|gran|neighbou?r|friend|brother|sister))\b"###,
+    r###"\b(?:can'?t|cant|cannot)\s+lift\s+(?:her|him|them|my\s+\w+)\s+off\s+the\s+(?:floor|ground)\b"###
+);
+patterns!(FALL_FINE,
+    r###"\b(?:but|and)\s+(?:he|she|they|it)\s*(?:'s|s|\s+is|\s+was)?\s*(?:ok|okay|fine|alright|all\s+right)\b"###,
+    r###"[,;]\s*(?:but\s+)?(?:hes|shes|theyre|it\s+is|he\s+is|she\s+is|they\s+are|he'?s|she'?s|they'?re)\s+(?:now\s+)?(?:ok|okay|fine|alright|all\s+right)\b"###,
+    r###"\b(?:says?|said|tells?|told)\s+(?:me\s+)?(?:he|she|they)\s*(?:'s|s|\s+was|\s+is)?\s*(?:ok|okay|fine|alright)\b"###,
+    r###"\b(?:got\s+up|walked\s+it\s+off|laughed\s+it\s+off|laughed|ran\s+off|is\s+walking|shes\s+walking|hes\s+walking|nothing\s+broken|no\s+harm|was\s+fine)\b"###,
+    r###"\b(?:i'?m|im)\s+(?:ok|okay|fine|alright)\b"###,
+    r###"\bstill\s+(?:fine|ok|okay|walking)\b"###,
+    r###"\b(?:picture|mirror|shelf|shelves|plaster|paint|tiles?|clock|poster|frame|curtains?|blind|radiator|handle|door|window|bricks?|render|gutter(?:ing)?|shingles?|hook|rail|coving|wallpaper|wreath|chimney|cable|lights?|fixture|fitting)\b[^.?!]{0,30}\b(?:fell|falls?|falling|came\s+off|come\s+off|coming\s+off|keeps?\s+falling)\b(?!\s+(?:on|onto|over)\s+(?:me|my\s+\w+|him|her|them|his\s+\w+|her\s+\w+|their\s+\w+))"###,
+    r###"\bit\s+(?:keeps?\s+falling|fell|falls|is\s+falling|came)\s+off\s+(?:the|a)\s+(?:wall|shelf|hook|ceiling|door|window|board)\b"###,
+    r###"\b(?:keeps?|is\s+always)\s+falling\s+off\s+(?:the|a|my|our)\s+(?:wall|shelf|ceiling|hook|door|window|board|brackets?)\b"###
+);
+patterns!(FALL_RED,
+    r###"\b(?:hit|hits|struck|landed\s+on|came\s+down\s+on|fell\s+on)\b[^.?!]{0,15}\b(?:me|my\s+\w+|him|her|them|his\s+\w+|her\s+\w+|their\s+\w+)\b"###,
+    r###"\b(?:unconscious|knocked\s+out|not\s+moving|isn'?t\s+moving|won'?t\s+wake|wont\s+wake|can'?t\s+feel|cant\s+feel|numb|vomit\w*|bleed\w*|hospital|ambulance|a\s+and\s+e|a&e|broken|broke|fractured|stiff\s+neck)\b"###,
+    r###"\b(?:head|neck|back|spine)\b[^.?!]{0,20}\b(?:hit|bang\w*|hurt|pounding|bleeding)\b"###
+);
+patterns!(FALL_PAST,
+    r###"\b(?:last|this)\s+(?:year|month|week|night|winter|summer|spring|autumn|xmas|christmas)\b"###,
+    r###"\b(?:\d+|a|one|two|three|four|five|six)\s+(?:yrs?|years?|months?|weeks?)\s+ago\b"###,
+    r###"\b(?:years|months|weeks|ages)\s+ago\b"###,
+    r###"\bused\s+to\b"###,
+    r###"\byesterday\b"###,
+    r###"\ba\s+while\s+ago\b"###,
+    r###"\bwhen\s+i\s+was\s+(?:a\s+kid|young|little|a\s+child|small)\b"###,
+    r###"\bwhen\s+(?:he|she|they)\s+(?:was|were)\s+(?:a\s+)?(?:kid|child|boy|girl|young|little|small|at\s+school|a\s+teenager)\b"###,
+    r###"\b(?:had|got)\s+it\s+checked\b"###,
+    r###"\bwas\s+in\s+hospital\s+(?:for|with|after)\b"###,
+    r###"\b(?:back)\s+then\b"###,
+    r###"\bwhen\s+he\s+was\s+(?:a\s+)?(?:baby|small|little)\b"###
+);
+patterns!(FALL_NOW,
+    r###"\bright\s+now\b"###,
+    r###"\bthis\s+(?:morning|afternoon|evening)\b"###,
+    r###"\bjust\b"###,
+    r###"\btoday\b"###,
+    r###"\bminutes?\s+ago\b"###,
+    r###"\ban\s+hour\s+ago\b"###,
+    r###"\bcan'?t\s+(?:get|stand|sit|feel|move)\b"###,
+    r###"\bunable\s+to\s+(?:get|stand|move)\b"###,
+    r###"\bnot\s+able\s+to\s+(?:get|stand|move)\b"###,
+    r###"\ban\s+ambulance\b"###,
+    r###"\bnot\s+breathing\b"###,
+    r###"\bunconscious\b"###,
+    r###"\bbleeding\b"###,
+    r###"\bhead\s+injur\w*\b"###,
+    r###"\bstill\s+(?:on\s+the\s+floor|lying|down)\b"###
+);
+patterns!(FALL_REPEAT,
+    r###"\b(?:keep|keeps|kept)\s+(?:on\s+)?(?:falling|tripping|slipping|going\s+over|having\s+falls?)\b(?!\s+(?:asleep|out|for|behind|apart|short|through|into|in\s+love))"###,
+    r###"\b(?:falls?|falling|trips?|tripping)\b[^.?!]{0,25}\b(?:all\s+the\s+time|every\s+day|each\s+day|a\s+lot|constantly|regularly|often)\b"###,
+    r###"\b(?:is|am|are)\s+always\s+(?:falling|tripping|slipping)\b"###,
+    r###"\b(?:has|have|had)\s+been\s+(?:falling|tripping|slipping|going\s+over)\b(?!\s+(?:asleep|out|for|behind|apart|short|through|into|in\s+love))"###,
+    r###"\b(?:had|have|has)\s+(?:a\s+)?(?:few|couple\s+of|several|two|three|more)\s+falls?\b"###
+);
+patterns!(FALL_PATTERN_HURT,
+    r###"\b(?:broke|broken|fractured|bent|deformed|sticking\s+out|back\s+to\s+front|bleeding|blood|gash|swollen|stitches|hospital|ambulance|a\s+and\s+e|a&e|unconscious|knocked\s+out)\b"###
+);
+patterns!(NEAR_MISS,
+    r###"\b(?:nearly|almost|near)\s+(?:fell|fallen|tripped|slipped|tumbled|went\s+over|came\s+off)\b"###,
+    r###"\bthought\s+i\s+(?:was\s+going\s+to|would)\s+fall\b"###
+);
+patterns!(NEAR_MISS_HARM,
+    r###"\b(?:broke|broken|fractured|hurt|hospital|ambulance|a\s+and\s+e|a&e|stitches|can'?t\s+(?:get|stand|move)|knocked\s+out|unconscious)\b"###
+);
+patterns!(PET_FELL,
+    r###"\b(?:dog|cat|pupp\w*|kitten|pup|pet|parrot|hamster|rabbit|bunny|horse|pony|budgie|guinea\s+pig|tortoise|ferret|gerbil|snake|lizard|animal)\b[^.?!]{0,20}\b(?:fell|fallen|jumped|slipped|tumbled)\b"###
+);
+patterns!(HUMAN_TOO,
+    r###"\b(?:my|our|her|his|their)\s+(?:son|daughter|child|kid|baby|boy|girl|mum|mom|dad|father|mother|husband|wife|partner|brother|sister|nan|gran|grandma|grandad|friend|neighbour|neighbor)\b"###,
+    r###"\b(?:i|i'm|im|he|she|they|we|you|someone|somebody)\b[^.?!]{0,12}\b(?:can'?t|cannot|can\s+not|couldn'?t|struggling\s+to|unable\s+to)\s+(?:breath\w*|(?:get|catch)\s+(?:my|his|her|their|our|a)\s+breath\w*|wake\s+up|stay\s+awake)"###,
+    r###"\b(?:i|i'm|im|he|she|they|we)\b[^.?!]{0,10}\b(?:am|is|are|'m|'s|'re|was|were)\s+(?:bleeding|unconscious|unresponsive|collapsed|choking)\b"###,
+    r###"\b(?:im|i'm)\s+(?:bleeding|unconscious|unresponsive|collapsed|choking)\b"###
+);
+patterns!(FALL_ASLEEP,
+    r###"\bf(?:ell|alls?|alling)\s+asleep\b"###
+);
+patterns!(FALL_WORD_IDIOM,
+    r###"\b(?:slip|slips|slipped|slipping)\s+up\b"###,
+    r###"\btrip(?:s|ped|ping)?\s+over\s+(?:my|his|her|their|your|our)\s+(?:words|tongue)\b"###,
+    r###"\b(?:fall|fell|falling)\s+(?:out|in)\s+with\b"###,
+    r###"\b(?:fall|fell|falling)\s+(?:out|owt)\s+(?:wi|wiv|wid|with|over|about)\b"###
+);
+patterns!(FALL_THING,
+    r###"\b(?:prices?|markets?|shares?|stocks?|temperature|rain|snow|sales|rates?|figures?|numbers?|pounds?|euros?|dollars?|hair|wigs?|leaves)\s+(?:keeps?\s+|kept\s+|is\s+|are\s+|was\s+|were\s+|had\s+|has\s+|have\s+)?(?:falling|fell|falls?|dropping|dropped)\b"###
+);
+patterns!(FALL_CHECK_OFF,
+    r###"\b(?:nearly|almost|could\s+have|might\s+have|would\s+have)\b[^.?!]{0,15}\b(?:fell|fallen|fall|slipped|tripped)\b"###,
+    r###"\blaugh\w*\b"###,
+    r###"\b(?:fell|fallen|fall|falling)\s+(?:asleep|for|in\s+love|behind|apart|short|through|into)\b"###,
+    r###"\b(?:fell|fallen|fall|falling)\s+out\b(?!\s+of\b)"###,
+    r###"\b(?:fell|fallen|fall|falling)\s+off\s+the\s+wag[go]n\b"###,
+    r###"\b(?:hair|wig|snow|rain|leaves|price|prices|temperature|pound|stock|market)\b"###,
+    r###"\b(?:dont|don'?t|didnt|didn'?t|never|not)\b[^.?!]{0,10}\b(?:fell|fallen)\b"###,
+    r###"\b(?:slip|slips|slipped|slipping)\s+up\b"###,
+    r###"\btrip(?:s|ped|ping)?\s+over\s+(?:my|his|her|their|your|our)\s+(?:words|tongue)\b"###,
+    r###"\b(?:fall|fell|falling)\s+(?:out|in)\s+with\b"###,
+    r###"\b(?:fall|fell|falling)\s+(?:out|owt)\s+(?:wi|wiv|wid|with|over|about)\b"###,
+    r###"\b(?:slip|slips|slipped|slipping)\s+(?:up|behind|past|by|through|away|me|him|her|them|us)\b"###,
+    r###"\b(?:slip|slips|slipped|slipping)\s+out\b(?!\s*of\b)"###,
+    r###"\b(?:slip|slips|slipped|slipping|trip|trips|tripped)\b[^.?!]{0,25}\b(?:work|works|schedule|deadlines?|grades?|marks?|standards?|quality|sales|figures?|prices?|markets?|memor(?:y|ies)|attention|a\s+note)\b"###,
+    r###"\b(?:work|schedule|deadlines?|grades?|standards?|quality|sales|figures?|prices?|markets?|the\s+quarter)\b[^.?!]{0,25}\b(?:has|have|had|keeps|keep|is|was)\b[^.?!]{0,10}\b(?:slip|slips|slipped|slipping)\b"###
+);
+patterns!(CONFUSION_NAMED_CAUSE,
+    r###"\b(?:was|were|is|been)\s+confused\s+(?:after|since|following)\s+(?:his|her|their|the)\s+(?:stroke|surgery|operation|anaesthetic|chemo|accident)\b"###
+);
+patterns!(HEAD_FALL,
+    r###"\b(?:fell|fallen|fall|falls|collapsed|went\s+down|slipped|tripped)\b"###
+);
+patterns!(HEAD_FALL_SIGN,
+    r###"\b(?:he|she|they|hes|shes|theyre|dad|mum|grandad|grandma|nan|gran|husband|wife|father|mother)\b.{0,40}\b(?:confus(?:ed|ion)\b(?!\s+(?:why|what|whether|if)\b)(?!\s+(?:about|by|at|as\s+to)\s+(?!where\b|who\b|whereabouts\b))|drowsy|sleepy|(?:isn'?t|isnt|not|wasn'?t|ain'?t)\s+making\s+(?:any\s+)?sense|(?:doesn'?t|doesnt|didn'?t|didnt)\s+know\s+(?:where\s+(?:he|she|they)\s+(?:is|are|was|were)|who\s+(?:i|we|he|she|they)\s+(?:am|are|is|was))\b|acting\s+(?:strange|odd|weird|differently)|(?:isn'?t|isnt|not|wasn'?t|ain'?t|hasn'?t|hadn'?t)\s+(?:been\s+)?(?:him|her|them)sel(?:f|ves)|talking\s+(?:rubbish|nonsense|gibberish)|can'?t\s+wake|knocked\s+out|unconscious)\b"###,
+    r###"\bconfused\b(?!\s+about)\b.{0,20}\b(?:after|since)\b.{0,20}\b(?:fell|fall|bang|knock)\b"###,
+    r###"\b(?:i|im|i'?m|ive|i'?ve)\b.{0,45}\bconfus(?:ed|ion)\b(?!\s+(?:why|what|whether|if)\b)(?!\s+(?:about|by|at|as\s+to)\s+(?!where\b|who\b|whereabouts\b))"###
+);
+patterns!(HEAD_BANG,
+    r###"\b(?:bang|bangs|banged|banging|hit|hits|hitting|knock|knocks|knocked|knocking|strike|struck|smack(?:s|ed|ing)?|crack(?:s|ed|ing)?|bump(?:s|ed|ing)?|bashed?|bashing|smashed?|smashing|slammed?)\s+(?:my|his|her|their|the|me\s+in\s+the|him\s+in\s+the|her\s+in\s+the|on\s+the|in\s+the)\s+head\b"###,
+    r###"\bhead\s+(?:injury|injuries|trauma|wound)\b"###,
+    r###"\b(?:got|gets|getting)\s+(?:hit|struck|clipped|caught|banged)\s+(?:on|in)\s+the\s+head\b"###,
+    r###"\bhit\s+(?:on|in)\s+the\s+head\s+(?:by|with)\b"###,
+    r###"\b(?:fell|fallen|fall|falls|tripped|slipped|toppled|tumbled)\s+(?:over|down|off|from|onto|on\s+to)\b.{0,25}\bhead\b"###,
+    r###"\bhead\s+(?:first|hit|banged|struck)\s+(?:on|into|off|against)\b"###
+);
+patterns!(HEAD_SEEN,
+    r###"\b(?:in|at)\s+(?:the\s+)?(?:hospital|a&e|ae|er|casualty)\b"###,
+    r###"\bbeen\s+checked\b"###,
+    r###"\b(?:doctor|nurse|paramedic|ambulance)\s+(?:has\s+)?(?:seen|checked|said|looked)\b"###,
+    r###"\bwalk-in\s+(?:centre|clinic)\b"###,
+    r###"\bthey\s+(?:kept|are\s+keeping)\b.{0,15}\bin\b"###
+);
+patterns!(HEAD_PAST,
+    r###"\b(?:last|this)\s+(?:year|month|week|night)\b"###,
+    r###"\byears?\s+ago\b"###,
+    r###"\bages\s+ago\b"###,
+    r###"\bused\s+to\b"###,
+    r###"\bwhen\s+i\s+was\s+(?:a\s+)?(?:kid|child|little)\b"###
+);
+patterns!(HEAD_RED,
+    r###"\bknock(?:ed|s)?\s+(?:him|her|them|my\s*self|him\s*self|her\s*self)?\s*out\b"###,
+    r###"\b(?:was|were|been|got|had|being)\s+knocked\s+out\b"###,
+    r###"\b(?:i|he|she|they|we|you)\b[^.?!]{0,15}\bout\s+cold\b"###,
+    r###"\b(?:my|his|her|their|our|your|the)\s+(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)\b[^.?!]{0,20}\bout\s+cold\b"###,
+    r###"\b(?:out\s+cold)\b[^.?!]{0,20}\b(?:floor|ground|sofa|couch|bed|street|pavement|road|bathroom|kitchen|hospital)\b"###,
+    r###"\b(?:fell|fallen|collapsed|dropped|banged|hit|knocked|tripped)\b[^.?!]{0,25}\bout\s+cold\b"###,
+    r###"\bunconscious\b"###,
+    r###"\bpassed\s+out\b"###,
+    r###"\bblacked\s+out\b"###,
+    r###"\bkeeled\s+over\b"###,
+    r###"\bconfus(?:ed|ion)\b(?!\s+about\s+(?!where\b|who\b|how\b))"###,
+    r###"\bdidn'?t\s+know\s+(?:where|who)\b"###,
+    r###"\b(?:not|isn'?t|isnt|ain'?t|wasn'?t|doesn'?t)\s+making\s+sense\b"###,
+    r###"\b(?:talking|chatting)\s+(?:rubbish|nonsense|gibberish)\b"###,
+    r###"\bslurr\w*\b"###,
+    r###"\bdouble\s+vision\b"###,
+    r###"\bpupils?\b.{0,15}\b(?:different|unequal|dilated|blown|one\s+(?:bigger|smaller|larger))\b"###,
+    r###"\bdrows(?:y|iness|ily)?\b"###,
+    r###"\b(?:very|really|so)\s+sleepy\b"###,
+    r###"\bcan'?t\s+(?:wake|stay\s+awake)\b"###,
+    r###"\b(?:keep|keeps|kept)\s+(?:on\s+)?(?:dozing(?:\s+off)?|nodding\s+off|drifting\s+off|falling\s+asleep|zonking\s+out)\b"###,
+    r###"\b(?:dozing|nodding|drifting|zonking)\s+(?:off|out)\b"###,
+    r###"\bcan'?t\s+keep\s+(?:my|his|her|their)?\s*eyes\s+open\b"###,
+    r###"\b(?:feel|feels|feeling|felt)\s+(?:a\s+bit\s+|really\s+|very\s+|so\s+)?(?:sleepy|drowsy|confused|not\s+with\s+it)\b"###,
+    r###"\b(?:being|been|keeps?)\s+sick\b"###,
+    r###"\bvomit\w*\b"###,
+    r###"\b(?:throw(?:ing|n)?|threw)\s+up\b"###,
+    r###"\b(?:was|were|got|gets|getting|kept)\s+(?:a\s+bit\s+|really\s+|very\s+)?sick\b"###,
+    r###"\bfaint(?:ed|s|ing)?\b"###,
+    r###"\bseizure\b"###,
+    r###"\b(?:having|had)\s+a\s+fit\b"###,
+    r###"\b(?:is|was|were|had|has|kept)\s+fitting\b(?!\s+(?:in|on|into|his|her|their|my|your|the|a)\b)"###,
+    r###"\bbleed(?:ing)?\s+(?:from|out\s+of)\s+(?:the\s+|his\s+|her\s+)?ears?\b"###,
+    r###"\bclear\s+fluid\b"###,
+    r###"\bwarfarin\b"###,
+    r###"\bblood\s+thinners?\b"###,
+    r###"\bclopidogrel\b"###,
+    r###"\b(?:worse|worst)\s+headache\b"###,
+    r###"\bheadache\s+(?:is\s+)?(?:getting|getting\s+)\s+worse\b"###,
+    r###"\bneck\s+(?:is\s+)?stiff\b"###,
+    r###"\bcan'?t\s+move\s+(?:my|his|her)\s+neck\b"###
+);
+patterns!(HEAD_KNOCKOUT,
+    r###"\b(?:was|were|been|got|gets|getting|being|had|has)\s+knocked\s+out\b(?!\s+(?:of|in|by)\b)"###,
+    r###"\bknocked\s+(?:him|her|them|my\s*self|him\s*self|her\s*self)\s*out\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,30}\b(?:tackle[ds]?|rugby|football|boxing|match|game|scrum|fell|fall|fallen|collided|collision|crashed?|crash|car|van|bike|motorbike|lorry|stairs|steps|ladder|wall|door|branch|tree|goalpost|post|railing|kerb|curb|round|rounds|canvas|ring|ring\s+rope)\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,30}\b(?:hit|banged?|struck|smacked|cracked|knocked)\b[^.?!]{0,12}\bheads?\b"###,
+    r###"\bheads?\b[^.?!]{0,20}\b(?:injur\w+|wound|trauma)\b[^.?!]{0,20}\bout\s+cold\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,60}\b(?:after|from|when|because)\b[^.?!]{0,30}\b(?:a\s+bang|bang(?:ed)?|hitting|hit|blew|blow|knocked|knock|fall|fell|falling|blow\s+to|kick|punch|crash|accident|smack)\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,40}\b(?:bleeding|bled|blood|fitting|had\s+a\s+fit(?!\s+of\s+(?:giggles|the\s+giggles|laughing))|seizure|convuls\w*|stopped\s+breathing|not\s+breathing|vomit\w*|threw\s+up|being\s+sick)\b"###,
+    r###"\b(?:hit|banged?|knocked|struck|clipped|collided|fell|fallen|crashed|tackled)\b[^.?!]{0,30}\bout\s+cold\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,20}\b(?:floor|ground|street|pavement|road|sofa|couch)\b"###,
+    r###"\bfound\s+(?:him|her|them|my\s+\w+|\w+)\b[^.?!]{0,25}\bout\s+cold\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,30}\bwhen\s+i\s+(?:found|got\s+home|got\s+in|got\s+back|came\s+in|came\s+home|arrived)\b"###,
+    r###"\bout\s+cold\s+for\s+(?:more\s+than\s+a\s+minute|(?:two|three|four|five|six|seven|eight|nine|ten|fifteen|twenty|thirty|forty|fifty|sixty|\d{2,})\s*(?:mins?|minutes?|hours?|hrs?)|ages|hours)\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,20}\b(?:blue|grey|gray|clammy|mottled|ashen)\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,40}\b(?:wet\s+my\s*self|wet\s+the\s+bed|wet\s+(?:him|her)\s*self|soaked\s+my\s*self|peed\s+my\s*self|peed\s+(?:him|her)\s*self|incontinent)\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,20}\b(?:floor|ground|street|pavement|road|bathroom|kitchen|hospital)\b"###
+);
+patterns!(OUT_COLD_ASLEEP,
+    r###"\bout\s+cold\b[^.?!]{0,20}\b(?:by|until|till|til|all\s+night|overnight|the\s+whole|as\s+soon\s+as|bed|beds|bedtime|pillow|nap|naps|bottle|feed|sleep\w*)\b"###,
+    r###"\b(?:by|until|till|til|as\s+soon\s+as)\s+(?:\w+\s+){0,2}\bout\s+cold\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,20}\b(?:after|before|from)\s+(?:the|a|his|her|my|their|our|that|this)?\s*(?:run|walk|feed|bottle|shift|night\s+shift|work|meal|dinner|lunch|breakfast|food|flight|drive|journey|day|game|match|film|movie|bath|swim|party|pub|wine|beer|drink\w*|heat|exhaust\w*|jet\s?lag|gym|training|school|college|class|exercise|tiring\s+day|long\s+day|night\s+out|night\s+in|table|sofa|exercise)\b"###
+);
+patterns!(OUT_COLD_NOW,
+    r###"\b(?:is|'s|are|'re|still)\s+(?:\w+\s+){0,2}out\s+cold\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,12}\b(?:right\s+now|now|at\s+the\s+moment)\b"###
+);
+patterns!(HEAD_OUT_COLD,
+    r###"\bout\s+cold\b[^.?!]{0,30}\b(?:tackle[ds]?|rugby|football|boxing|match|game|scrum|fell|fall|fallen|collided|collision|crashed?|crash|car|van|bike|motorbike|lorry|stairs|steps|ladder|wall|door|branch|tree|goalpost|post|railing|kerb|curb|round|rounds|canvas|ring|ring\s+rope)\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,30}\b(?:hit|banged?|struck|smacked|cracked|knocked)\b[^.?!]{0,12}\bheads?\b"###,
+    r###"\bheads?\b[^.?!]{0,20}\b(?:injur\w+|wound|trauma)\b[^.?!]{0,20}\bout\s+cold\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,60}\b(?:after|from|when|because)\b[^.?!]{0,30}\b(?:a\s+bang|bang(?:ed)?|hitting|hit|blew|blow|knocked|knock|fall|fell|falling|blow\s+to|kick|punch|crash|accident|smack)\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,40}\b(?:bleeding|bled|blood|fitting|had\s+a\s+fit(?!\s+of\s+(?:giggles|the\s+giggles|laughing))|seizure|convuls\w*|stopped\s+breathing|not\s+breathing|vomit\w*|threw\s+up|being\s+sick)\b"###,
+    r###"\b(?:hit|banged?|knocked|struck|clipped|collided|fell|fallen|crashed|tackled)\b[^.?!]{0,30}\bout\s+cold\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,20}\b(?:floor|ground|street|pavement|road|sofa|couch)\b"###,
+    r###"\bfound\s+(?:him|her|them|my\s+\w+|\w+)\b[^.?!]{0,25}\bout\s+cold\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,30}\bwhen\s+i\s+(?:found|got\s+home|got\s+in|got\s+back|came\s+in|came\s+home|arrived)\b"###,
+    r###"\bout\s+cold\s+for\s+(?:more\s+than\s+a\s+minute|(?:two|three|four|five|six|seven|eight|nine|ten|fifteen|twenty|thirty|forty|fifty|sixty|\d{2,})\s*(?:mins?|minutes?|hours?|hrs?)|ages|hours)\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,20}\b(?:blue|grey|gray|clammy|mottled|ashen)\b"###,
+    r###"\bout\s+cold\b[^.?!]{0,40}\b(?:wet\s+my\s*self|wet\s+the\s+bed|wet\s+(?:him|her)\s*self|soaked\s+my\s*self|peed\s+my\s*self|peed\s+(?:him|her)\s*self|incontinent)\b"###
+);
+patterns!(PET_WORDS,
+    r###"\b(?:dog|dogs|puppy|pup|cat|cats|kitten|horse|pony|rabbit|hamster|parrot|budgie|bird|guinea\s+pig|gerbil)\b"###
+);
+patterns!(HUMAN_ANCHOR,
+    r###"\b(?:i|i'm|i've|he|she|someone|somebody|anyone|everyone)\b|\b(?:my|the)\s+(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)\b|\b(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)\b|(?:\d{1,2}[\s-]*(?:month|months|week|weeks|year|years|yr|yrs|mo|mth|mths)[\s-]*old\b|(?:\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[\s-]*(?:months?|weeks?|years?|yrs?)[\s-]+old\b|\b(?:newborn|newborns|toddlers?|infants?|teenagers?|teens?|preschoolers?|schoolboy|schoolgirl)\b)"###
+);
+patterns!(NOT_NOW,
+    r###"\bfor\s+(?:a|my|the)\s+(?:story|novel|book|film|script|screenplay|essay|assignment|character)\b"###,
+    r###"\bin\s+(?:a|my|the)\s+(?:story|novel|book|film|game|dream)\b"###,
+    r###"\b(?:story|novel|script|screenplay|essay|film)\b.*\b(?:character|plot|scene)\b"###,
+    r###"\bmy\s+(?:character|protagonist)\b"###,
+    r###"\bif\s+(?:someone|a\s+person|somebody|you|your\s+friend)\b"###,
+    r###"\bwhat\s+(?:do|should)\s+(?:you|i|we)\s+do\s+(?:if|when)\b"###,
+    r###"\bwhat\s+(?:if|would\s+happen\s+if)\b"###,
+    r###"\bhow\s+do\s+you\s+(?:help|treat|deal\s+with)\b"###,
+    r###"\bhow\s+(?:can|do|should)\s+(?:i|we|you)\s+(?:help|support|talk\s+to|deal\s+with|approach|comfort)\b"###,
+    r###"\bfirst\s+aid\s+(?:for|course|kit|training)\b"###,
+    r###"\b(?:qualified|trained|training|work(?:ing)?\s+as)\b.*\b(?:nurse|doctor|paramedic|lifeguard)\b"###,
+    r###"\b(?:how|what)\b.{0,15}\b(?:know|tell|spot|recognise|recognize|signs?|symptoms?)\b"###,
+    r###"\bwhat\s+does\b.{0,25}\b(?:feel\s+like|look\s+like|mean|do\s+to\s+you)\b"###,
+    r###"\b(?:signs?|symptoms?|causes?|cause[sd]?|prevent\w*|reduce\s+the\s+risk)\b.{0,25}\b(?:of\s+)?(?:a\s+)?(?:stroke|seizures?|choking|anaphyla\w*|asthma|hypo\w*|heart\s+attack)\b"###
+);
+patterns!(NOT_NOW_FICTION,
+    r###"\bfor\s+(?:a|my|the)\s+(?:story|novel|book|film|script|screenplay|essay|assignment|character)\b"###,
+    r###"\bin\s+(?:a|my|the)\s+(?:story|novel|book|film|game|dream)\b"###,
+    r###"\b(?:story|novel|script|screenplay|essay|film)\b.*\b(?:character|plot|scene)\b"###,
+    r###"\bmy\s+(?:character|protagonist)\b"###
+);
+patterns!(FEMALE_WORDS,
+    r###"\bm(?:u|o)m\b"###,
+    r###"\bmother\b"###,
+    r###"\bwife\b"###,
+    r###"\bgirlfriend\b"###,
+    r###"\bsister\b"###,
+    r###"\bdaughter\b"###,
+    r###"\blittle\s+girl\b"###,
+    r###"\bgirl\b"###,
+    r###"\baunt\b"###,
+    r###"\bnan\b"###,
+    r###"\bgran\b"###,
+    r###"\bgranny\b"###,
+    r###"\bgrandma\b"###,
+    r###"\bgrandmother\b"###,
+    r###"\bniece\b"###,
+    r###"\bshe\b"###,
+    r###"\bher\b"###
+);
+patterns!(MALE_WORDS,
+    r###"\bdad\b"###,
+    r###"\bfather\b"###,
+    r###"\bhusband\b"###,
+    r###"\bboyfriend\b"###,
+    r###"\bbrother\b"###,
+    r###"\bson\b"###,
+    r###"\blittle\s+boy\b"###,
+    r###"\bboy\b"###,
+    r###"\buncle\b"###,
+    r###"\bgrandad\b"###,
+    r###"\bgrandpa\b"###,
+    r###"\bgrandfather\b"###,
+    r###"\bnephew\b"###,
+    r###"\bhe\b"###,
+    r###"\bhim\b"###
+);
+patterns!(CHILD_ANON,
+    r###"\b(?:my|our|her|his|their|the)\s+(?:baby|babies|toddler|newborn|infant|child|kid|little\s+one|little\s+lad|little\s+girl|little\s+boy|\d+\s*(?:year|month)s?\s*old)\b"###
+);
+patterns!(TOOTH_OUT,
+    r###"\b(?:my|his|her|their|the|your|our|a|an|son'?s|daughter'?s|kid'?s|child'?s|husband'?s|wife'?s|partner'?s|friend'?s|mum'?s|dad'?s)\s+(?:front\s+|back\s+|adult\s+|baby\s+|milk\s+)?(?:tooth|teeth)\b[^.?!]{0,20}\b(?:knock(?:ed|s|ing)?\s+out|came\s+out|comes?\s+out|fell\s+out|falls?\s+out|is\s+hanging)\b"###,
+    r###"\b(?:knock|knocks|knocked|knocking|kick|kicks|kicked|kicking|punch|punches|punched|punching|smash|smashes|smashed|smashing)\s+(?:my|his|her|their|our|your|a|an|out\s+)\s*(?:front\s+|back\s+)?tooth\b"###,
+    r###"\b(?:knock|knocks|knocked|knocking|kicking|kicked|punch|punched|punching|smash|smashed|smashing)\s+(?:my|his|her|their|the|our|your|out\s+)\b[^.?!]{0,18}\bteeth\b"###,
+    r###"\b(?:knocked|came|fell)\s+(?:out\s+)?(?:\w+\s+){0,4}(?:teeth|tooth)\b"###,
+    r###"\b(?:teeth|tooth)\s+(?:got\s+|were\s+|was\s+|both\s+)?(?:knocked|came|fell)\s+out\b"###
+);
+pub(super) const FALL_SHE: &[&str] = &[
+    "Don't move her and don't let her get up: ring 999 or 911 and say how she fell and from what height. Keep her warm and still, don't give her anything to eat or drink, and if she is not breathing normally start CPR.",
+    "That's an ambulance, not a wait-and-see: ring 999 or 911, keep her still and warm where she landed, and don't try to sit her up or move her. Don't give her food or drink while you wait.",
+];
+pub(super) const FALL_HE: &[&str] = &[
+    "Don't move him and don't let him get up: ring 999 or 911 and say how he fell and from what height. Keep him warm and still, don't give him anything to eat or drink, and if he is not breathing normally start CPR.",
+    "That's an ambulance, not a wait-and-see: ring 999 or 911, keep him still and warm where he landed, and don't try to sit him up or move him. Don't give him food or drink while you wait.",
+];
+pub(super) const FALL_THEY: &[&str] = &[
+    "Don't move them and don't let them get up: ring 999 or 911 and say how they fell and from what height. Keep them warm and still, don't give them anything to eat or drink, and if they are not breathing normally start CPR.",
+    "That's an ambulance, not a wait-and-see: ring 999 or 911, keep them still and warm where they landed, and don't try to sit them up or move them. Don't give them food or drink while you wait.",
+];
+pub(super) const FALL_SELF_THEY: &[&str] = &[
+    "Don't try to get up, and don't let anyone move you: ring 999 or 911 and say how you fell. Stay still and warm where you are, and don't eat or drink anything while you wait.",
+    "Stay where you are and ring 999 or 911 - don't try to stand or sit up on your own. Keep warm, and don't take anything to eat or drink until someone has looked at you.",
+];
+pub(super) const HEAD_BANG_REPLIES: &[&str] = &[
+    "A bang on the head is usually fine, but the next 24 hours are the ones to watch: being sick, being knocked out, or feeling confused or unusually sleepy means an ambulance or A&E rather than wait, and 111 will advise you on anything milder. Are you up and talking normally now, or has anything changed since it happened?",
+    "A bumped head hurts for a day or two and an ice pack on it for ten minutes is plenty, but a knock-out, being sick, or feeling confused or sleepier than usual means an ambulance or A&E rather than wait - 111 for anything milder. Are you up and talking normally now, or has anything changed since it happened?",
+];
+pub(super) const HEAD_BANG_OTHER_REPLIES: &[&str] = &[
+    "A bang on the head is usually fine, but the next 24 hours are the ones to watch: being sick, being knocked out, or {s} seeming confused or unusually sleepy means an ambulance or A&E rather than wait, and 111 will advise you on anything milder. Is {s} up and talking normally now, or has anything changed since it happened?",
+    "A bumped head hurts for a day or two, but a knock-out, being sick, or {s} seeming confused or sleepier than usual means an ambulance or A&E rather than wait - 111 for anything milder. Is {s} up and talking normally now, or has anything changed since it happened?",
+];
+pub(super) const HEAD_BANG_RED_REPLIES: &[&str] = &[
+    "That is a 999 call rather than wait and see: being knocked out, confused, drowsy or sick after a bang on the head is a head injury until a doctor says otherwise. Keep still and awake, stay with someone, and don't drive yourself.",
+    "Ring 999 or 911 now rather than waiting to see: confusion, drowsiness or sickness after a bang on the head is a head injury until a doctor says otherwise. Keep awake and still while you wait, and don't take anything for the headache until someone has seen you.",
+];
+pub(super) const HEAD_BANG_RED_OTHER_REPLIES: &[&str] = &[
+    "That is a 999 call rather than wait and see: being knocked out, confused, drowsy or sick after a bang on the head is a head injury until a doctor says otherwise. Stay with {o}, keep {o} awake and still, and don't let {o} drive.",
+    "Ring 999 or 911 now rather than waiting to see: confusion, drowsiness or sickness after a bang on the head is a head injury until a doctor says otherwise. Keep {o} awake and still, and stay with {o} until help comes.",
+];
+patterns!(FAINT, r###"\b(?:i|he|she|they|we|my\s+(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)|the\s+(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)|(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer))\s+(?:\w+\s+){0,3}(?:fainted|fainting|faints|passed\s+out|passing\s+out|blacked\s+out|blacking\s+out|collapsed|was\s+unconscious|were\s+unconscious|been\s+unconscious|(?:was|were|been|went)\s+out\s+cold|out\s+cold)\b"###,
+r###"\b(?:had\s+)?(?:a\s+)?(?:funny\s+turn|blackout|fainting\s+fit)\b"###,
+r###"\bcame\s+(?:over|round)\b[^.?!]{0,20}\b(?:funny|queer|faint|on\s+the\s+floor)\b"###,
+r###"\b(?:everything|it\s+all|all\s+of\s+it)\b(?:\s+\w+){0,2}\s+(?:went|goes|go|turned|turns|has\s+gone|had\s+gone)\s+(?:black|dark|white)\b"###,
+r###"\b(?:the\s+room|the\s+world|my\s+(?:vision|sight|eyesight|eyes))\b(?:\s+\w+){0,2}\s+(?:went|goes|go|turned|turns|has\s+gone|had\s+gone)\s+(?:black|dark|white)\b"###,
+r###"\bmy\s+(?:vision|sight|eyesight)\s+(?:went|goes)\b(?!\s+(?:a\s+bit|blurry|blurred|fuzzy|double|bad|worse))"###,
+r###"\b(?:went|goes|go)\s+blind\s+(?:for|in)\s+(?:a|an)\s+(?:second|moment|minute|few)\b"###,
+r###"\b(?:came|come)\s+(?:round|to)\b(?:\s+\w+){0,3}\s+on\s+(?:the|my|a)\s+(?:\w+\s+){0,2}floor\b"###);
+patterns!(SPEAKER_HIT, r###"\bi\s+(?:keep\s+|kept\s+|just\s+|nearly\s+|almost\s+|have\s+|had\s+)?(?:hit|hitting|slap(?:ped|ping)?|punch(?:ed|ing)?|kick(?:ed|ing)?|beat|beating|chok(?:ed|ing)?|strangl(?:ed|ing)?|drag(?:ged|ging)?|threw|thrown|throwing|scratch(?:ed|ing)|claw(?:ed|ing))\s+(?:my\s+(?:partner|husband|wife|boyfriend|girlfriend|ex|fianc(?:e|ée)|mum|mom|mother|dad|father|son|daughter|child|kid|kids|children|baby|stepson|stepdaughter|stepdad|stepmum|brother|sister|nan|gran|grandma|grandad|carer)(?!'s)|(?:my|the)\s+(?:kids|children|child|baby|son|daughter)s?(?!'s)|her|him|them)\b"###);
+patterns!(HIT_SPEAKER, r###"\b(?:he|she|they|hubby|my\s+(?:(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)|step(?:mum|mom|dad|mother|father|brother|sister|son|daughter|parent|child|children)|ex|landlord|landlady|housemate|lodger|aunt|auntie|uncle|cousin|nan|nana|grandparent|in-?laws?|father-?in-?law|mother-?in-?law|son-?in-?law|daughter-?in-?law|guardian|foster\s+parent|boy|friend|manager|supervisor|nieces?|nephews?|grandmothers?|grandfathers?|grandparents?))\b[^.?!]{0,30}\b(?:hits?|hitting|beat(?:s|ing)?|punch(?:es|ed|ing)?|kick(?:es|ed|ing)?|chok(?:es|ed|ing)|slapp?(?:s|ed|ing)?|smack(?:s|ed|ing)?|drag(?:s|ged|ging)?|strangl(?:e|es|ed|ing)|shov(?:e|es|ed|ing)|spat\s+at|spit\s+at|hurl(?:s|ed|ing)?|attack(?:s|ed|ing)?|savaged|mauled|thump(?:s|ed|ing)?|push(?:es|ed|ing)?|whack(?:s|ed|ing)?|head-?butt(?:s|ed|ing)?)\s+(?:my|me\s+in\s+my)\s+(?:face|head|back|arm|arms|leg|legs|ribs?|stomach|belly|jaw|eye|eyes|ear|ears|neck|throat|shoulders?|chest|side|hip|hips|thigh|mouth|nose|teeth|wrist|knee)\b(?![^.?!]{0,40}\b(?:cake|cakes|cream|icing|jelly|bun|buns|pudding|pie|pies|flour|bunting|snow|snowdrift|leaves|foam|bubbles|mud|sand|dough|pillow\s+fight)\b(?![^.?!]{0,60}\b(?:hit|hits|punch(?:ed|es)?|kick(?:ed|es)?|slap(?:ped|s)?|beat(?:s)?|chok(?:ed|es)?|shov(?:ed|es)?|push(?:ed|es)?)\s+me\b(?!\s+(?:on|round|in)\s+the\s+back\b))(?![^.?!]{0,60}\b(?:breath|breathe|breathing|breathless|blacked\s+out|passed\s+out|unconscious|choking|couldnt\s+breathe|could\s+not\s+breathe|no\s+air)\b))"###,
+r###"\b(?:he|she|they|my\s+(?:(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)|step(?:mum|mom|dad|mother|father|brother|sister|son|daughter|parent|child|children)|ex|landlord|landlady|housemate|lodger|aunt|auntie|uncle|cousin|nan|nana|grandparent|in-?laws?|father-?in-?law|mother-?in-?law|son-?in-?law|daughter-?in-?law|guardian|foster\s+parent|boy|friend|manager|supervisor|nieces?|nephews?|grandmothers?|grandfathers?|grandparents?))\b[^.?!]{0,30}\b(?:hits?|hitting|beat|beats|beating|slapp?(?:s|ed)?|punch(?:es|ed)?|kick(?:s|ed)?|struck|thump(?:s|ed)?|whack(?:s|ed)?|smack(?:s|ed)?|belt(?:s|ed)?|cuff(?:s|ed)?)\b\s+(?:me\s+(?:in|on|across|round|about)\s+)?(?:the|my)\s+(?:face|head|arm|ribs|stomach|back|throat|neck|jaw|cheek|nose|eye|eyes|leg|hip|shoulder|wrist|chest|side|belly|ear|mouth|thigh|knee)s?\b"###);
+patterns!(HIT_DENIED, r###"\b(?:never|didn'?t|didnt|don'?t|dont|wouldn'?t|wouldnt|not|have\s+never)\s+(?:ever\s+)?(?:hit|hitting|hurt|hurting|touch|touched|lay\s+a\s+hand|laid\s+a\s+hand)\b"###,
+r###"\bhit\s+(?:her|him|them|my\s+(?:(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)|step(?:mum|mom|dad|mother|father|brother|sister|son|daughter|parent|child|children)|ex|landlord|landlady|housemate|lodger|aunt|auntie|uncle|cousin|nan|nana|grandparent|in-?laws?|father-?in-?law|mother-?in-?law|son-?in-?law|daughter-?in-?law|guardian|foster\s+parent|boy|friend|manager|supervisor|nieces?|nephews?|grandmothers?|grandfathers?|grandparents?))\s+back\b"###,
+r###"\b(?:lose|losing|lost)\s+my\s+temper\s+(?:with|at)\s+(?:her|him|them|the\s+kids|my\s+(?:(?:mum|mom|mother|dad|father|son|daughter|husband|wife|partner|boyfriend|girlfriend|brother|sister|friend|flatmate|roommate|baby|child|kid|kids|children|grand(?:child|children|son|daughter|kid)s?|step(?:child|children|son|daughter)s?|boy|girl|man|woman|lady|guy|bloke|neighbou?r|colleague|boss|gran|granny|nan|grandad|grandma|grandpa|mate|carers?|care\s+workers?|support\s+workers?|social\s+workers?|personal\s+assistants?|nurses?|midwives?|midwife|doctors?|gps?|physios?|therapists?|patient|pupil|student|teacher|driver|passenger|singer|player|runner|swimmer)|step(?:mum|mom|dad|mother|father|brother|sister|son|daughter|parent|child|children)|ex|landlord|landlady|housemate|lodger|aunt|auntie|uncle|cousin|nan|nana|grandparent|in-?laws?|father-?in-?law|mother-?in-?law|son-?in-?law|daughter-?in-?law|guardian|foster\s+parent|boy|friend|manager|supervisor|nieces?|nephews?|grandmothers?|grandfathers?|grandparents?))\b[^.?!]{0,30}\b(?:shout|shouted|shouting|yell|yelled|swore|swear|snapped|said|slam|slammed|walked|rowing|row|argue|argued|arguing)\b"###,
+r###"\bwhen\s+we\s+were\s+(?:kids|children|little|lads|girls|boys)\b"###,
+r###"\bwe\s+used\s+to\s+(?:fight|hit|scrap|wrestle)\b"###,
+r###"\bwhen\s+i\s+was\s+(?:\d+|a\s+kid|a\s+child|a\s+lad|a\s+boy|a\s+girl|young|little|small|tiny|at\s+school|in\s+school)\b"###,
+r###"\b(?:as|like)\s+(?:a\s+)?(?:kid|child|kids|children|lads|boys|girls)\b"###,
+r###"\bgrowing\s+up\b"###,
+r###"\b(?:at|in)\s+(?:primary|secondary|junior|middle|comprehensive)\s+school\b"###,
+r###"\bi\s+used\s+to\s+(?:\w+\s+){0,3}(?:hit|fight|scrap|wrestle)\b[^.?!]{0,25}\b(?:brother|sister|cousin|mate|friend|kids|kids|boy|girl)s?\b"###,
+r###"\b(?:accident|accidentally|by\s+mistake|didn'?t\s+mean|didnt\s+mean|in\s+my\s+sleep|sleepwalking|fidgeting)\b"###,
+r###"\b(?:awake|out\s+of\s+bed|to\s+wake\s+(?:me|him|her|them|the\s+kids))\b"###,
+r###"\b(?:in\s+a\s+dream|dream(?:t|ed)\b|had\s+a\s+dream|nightmare)\b"###,
+r###"\b(?:mess(?:ing)?\s+about|mucking\s+about|play(?:ing)?\s*(?:fighting|fight)|sparring|boxing|wrestl(?:ing|e)|judo|karate|rugby|football|practice|training|drill|a\s+game|snowball|water\s+fight|paintball|nerf|tickl(?:e|ing)|play)\b"###,
+r###"\b(?:at|in|during|on)\s+(?:the\s+)?(?:chess|cards?|scrabble|monopoly|backgammon|draughts|checkers|dominoes|poker|darts|snooker|billiards|pool|bowling|tennis|badminton|squash|golf|cricket|football|rugby|rounders|netball|basketball|hockey|table\s+tennis|video\s+games?|playstation|xbox|wii|board\s+game)\b"###,
+r###"\b(?:in|at|during)\s+(?:[\w-]+\s+)?(?:final|match|game|tournament|league|race|marathon|competition|championship|quiz)\b(?!\s+(?:argument|row|fight|bust-?up|falling\s+out))"###);
+patterns!(HIT_THING, r###"\b(?:partner|husband|wife|boyfriend|girlfriend|ex|fiance|fiancee|son|daughter|child|kid|kids|children|baby|mum|mom|mother|dad|father|brother|sister|nan|gran|grandma|grandad|carer|parents)'s\b"###,
+r###"\b(?:partner|husband|wife|boyfriend|girlfriend|ex|son|daughter|child|kid|kids|children|baby|mum|mom|mother|dad|father|brother|sister|carer)(?:s)?\s+(?:\w+\s+){0,2}(?:cake|car|bike|toys?|ball|phone|laptop|window|door|plate|glass|cup|mug|tv|telly|scooter|bike|present|cards?|homework|drawing|picture)\b"###);
+patterns!(HIT_IN_PLAY, r###"\b(?:my\s+)?(?:son|daughter|child|kid|toddler|baby|nephew|niece|grandson|granddaughter)\b[^.?!]{0,40}\b(?:hit|hits|slapp?(?:ed|s)?|punch(?:ed|es)?|kicked?)\b[^.?!]{0,40}\b(?:play(?:ing)?|playfully|play-?fighting|mucking\s+about|messing\s+about|wrestl(?:e|ing)|tickl(?:e|ing)|accidentally|by\s+accident|by\s+mistake|didn'?t\s+mean|didnt\s+mean|not\s+on\s+purpose|tantrum)\b"###,
+r###"\b(?:play(?:ing)?|wrestl(?:e|ing)|tickl(?:e|ing)|mucking\s+about|messing\s+about)\b[^.?!]{0,40}\b(?:my\s+)?(?:son|daughter|child|kid|toddler|baby)\b[^.?!]{0,40}\b(?:hit|slapp?(?:ed|s)?|punch(?:ed|es)?|kicked?)\b"###,
+r###"\b(?:my\s+)?(?:son|daughter|child|kid|toddler|baby|nephew|niece|grandson|granddaughter)\b[^.?!]{0,30}\b(?:hit|hits|slapp?(?:ed|s)?|punch(?:ed|es)?|kicked?|head-?butt(?:ed|s)?)\b[^.?!]{0,30}\b(?:toy|ball|pillow|block|blocks|stick|book|cup|spoon|remote|brick|lego)\b"###,
+r###"\bh(?:it|its|itting)\s+my\s+(?:hand|arm|finger)s?\s+(?:away|off|aside|back)\b"###);
+const ABUSE_REPLIES: &[&str] = &[
+    "What's happening to you is abuse, and it is not your fault. If you're in danger right now call 999 or 911; otherwise call a domestic abuse helpline when it's safe to talk, for example 0808 2000 247 (UK) or 1-800-799-7233 (US).",
+    "I'm sorry, that shouldn't be happening to you. Please get a real person involved: 999 or 911 if you're in danger now, or a domestic abuse helpline (0808 2000 247 in the UK, 1-800-799-7233 in the US) that can plan it out with you.",
+];
+const ABUSE_OWN_REPLIES: &[&str] = &[
+    "Hitting someone you live with is abuse, and it is the thing to stop rather than a temper you have to manage. Respect (0808 802 4040 in the UK) is a free, confidential line for people who are violent or frightening at home and it will work out the next step with you; there are equivalents in most countries. If anyone in the house is in danger right now, ring 999 or 911 and tell them what has happened, and until you have spoken to someone, stay off drink and drugs, because that is what turns an argument into this.",
+    "That is abuse, and the fact you are saying it is the only good sign in the line. Ring Respect on 0808 802 4040 (UK, free, confidential) or the equivalent in your country, and if someone there is in danger now, 999 or 911. Until then: put distance between you - leave the room, go for a walk - and no drink, because it is what makes the next one more likely.",
+];

@@ -1,0 +1,5 @@
+// Generated from bot/knowledge/dates.py at 7d63c7fbebb44c7e466e5c8b5c1f341ab767929e.
+pub(super) static ROWS_0: &[RawRow] = &[
+    // bot/knowledge/dates.py:161
+    RawRow { id: "the-date-of-a-thing", domain: "dates", reply: "", key: &[&["eiffel tower", "eiffel", "penicillin", "fleming", "ice age", "ice ages", "last ice age", "glaciation", "glacial period", "poll tax", "community charge", "empire windrush", "windrush", "statue of liberty", "liberty island", "nhs", "national health service"],&["when", "when was", "when did", "what year", "which year", "how old", "how long ago", "how long did", "how long was", "how long has", "how long have", "lasted", "who built", "built", "discovered", "invented", "founded", "started"],], grouped: true, avoid: &[], ask: &[], slips: &[], bias: 4, explain: false, report: false, fault: false, outcomes: &[], guard: guards::Guard::Text(|reading| { let _ = reading; super::dates::names_a_date(reading) }), callback: Callback::Text(|reading| { let _ = reading; super::dates::reply(reading).map(std::borrow::Cow::Borrowed) }), shape: &[], lead: super::leading::Lead::None },
+];

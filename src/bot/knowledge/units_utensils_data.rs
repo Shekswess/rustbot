@@ -1,0 +1,8 @@
+// Utensil share patterns and values from the pinned PyBot unit reader.
+pattern!(SHARE, r###"\b(?<word>three[\s-]quarters?|two[\s-]thirds?|one[\s-](?:third|quarter|half)|a[\s-](?:third|quarter|half|fifth|sixth)|half|\d\s*/\s*\d)\s*(?:of\s+)?(?:an?\s+)?(?<unit>cups?|tablespoons?|tbsp|teaspoons?|tsp)\b"###);
+pattern!(SHARE_FRACTION, r###"\b(?:three[\s-]quarters?|two[\s-]thirds?|one[\s-](?:third|quarter|half)|a[\s-](?:third|quarter|half|fifth|sixth)|half|\d\s*/\s*\d)\b"###);
+pattern!(SHARE_ASK, r###"\b(?:what\s+is|whats|what's|how\s+much\s+is|how\s+much|how\s+many|how\s+big\s+is)\b"###);
+pattern!(NOT_ABOUT_A_MEASURE, r###"\bgrams?\b|\bg\b|\bml\b|\bmillilitres?\b|\bmilliliters?\b|\blitres?\b|\bliters?\b|\bounces?\b|\boz\b|\bpounds?\b|\blbs?\b|\bpints?\b|\bquarts?\b|\bcelsius\b|\bfahrenheit\b|\bdegrees?\b|\bcalories?\b"###);
+pattern!(SHARE_THAT, r###"\b(?<word>three[\s-]quarters?|two[\s-]thirds?|one[\s-](?:third|quarter|half)|a[\s-](?:third|quarter|half|fifth|sixth)|half)\s+(?:of\s+)?(?:that|it|the same)\b"###);
+pattern!(SHARE_LEAD, r###"^(?:and|so|then|ok|okay|what|how|about|much|is|whats|what's)\b"###);
+const SHARE_VALUE: &[(&str, f64)] = &[("a fifth",0.2),("a half",0.5),("a quarter",0.25),("a sixth",0.16666666666666666),("a third",0.3333333333333333),("a-fifth",0.2),("a-half",0.5),("a-quarter",0.25),("a-sixth",0.16666666666666666),("a-third",0.3333333333333333),("half",0.5),("one half",0.5),("one quarter",0.25),("one third",0.3333333333333333),("one-half",0.5),("one-quarter",0.25),("one-third",0.3333333333333333),("three quarter",0.75),("three quarters",0.75),("three-quarter",0.75),("three-quarters",0.75),("two third",0.6666666666666666),("two thirds",0.6666666666666666),("two-third",0.6666666666666666),("two-thirds",0.6666666666666666)];

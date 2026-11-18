@@ -1,0 +1,276 @@
+// Patterns from the PyBot reader for changing and settled answers.
+
+use super::{Change, LazyLock, Regex, Shape};
+
+pattern!(
+    A_HOW_IT_WORKS,
+    r#"\bhow\s+(?:do|does|did)\b|\bwhy\s+(?:do|does|did)\b|\bwhat\s+causes?\b|\bwhat\s+caused\b|\bhow\s+come\b"#
+);
+pattern!(
+    A_SAYS_NOW,
+    r#"\b(?:today|tonight|tomorrow|right\s+now|at\s+the\s+moment|this\s+(?:morning|afternoon|evening|week|weekend)|currently|still)\b"#
+);
+pattern!(
+    A_ARITHMETIC,
+    r#"\d\s*(?:\+|\*|x|/|plus|minus|times|divided\s+by|multiplied\s+by)\s*\d|\d\s+-\s+\d|\b(?:percent|per\s?cent)\b|\d\s*%|\bwhats\s+\d+\s*%|\b(?:plus|minus|divided\s+by|multiplied\s+by)\s+(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|twenty|thirty|fifty|hundred|thousand)\b"#
+);
+pattern!(
+    A_HAS_A_NUMBER,
+    r#"\d|\b(?:one|two|three|four|five|six|seven|eight|nine|ten)\b"#
+);
+pattern!(
+    A_AN_AMOUNT_OF_A_THING,
+    r#"\b\d+\s*(?:g|kg|kilos?|kilograms?|grams?|oz|ounces?|lbs?|pounds?|ml|l|millilit(?:re|er)s?|litres?|liters?|cups?|tbsp|tsp|tablespoons?|teaspoons?|celsius|fahrenheit|centigrade|degrees|stone|inches?|inch|cm|mm|metres?|meters?|feet|foot|ft|miles?|km|yards?|pints?|quarts?|gallons?)\b\s+(?:of|in)\b|\b(?:a|an|one|two|three|half|quarter)\s+(?:g|kg|kilos?|kilograms?|grams?|oz|ounces?|lbs?|ml|l|millilit(?:re|er)s?|litres?|liters?|cups?|tbsp|tsp|tablespoons?|teaspoons?|celsius|fahrenheit|centigrade|degrees|stone|inches?|inch|cm|mm|metres?|meters?|feet|foot|ft|miles?|km|yards?)\s+of\b"#
+);
+pattern!(
+    A_PAST_YEAR,
+    r#"\b(?:back\s+)?in\s+(?:1[0-9]{3}|20[0-2][0-9])\b"#
+);
+pattern!(
+    A_HOW_OLD_IS_THE_WORLD,
+    r#"\bhow\s+old\s+is\s+the\s+(?:earth|world|universe|planet|sun|moon)\b"#
+);
+pattern!(
+    A_HISTORY_ITSELF,
+    r#"\b(?:first|second|third|1st|2nd|world)\s+world\s+war\b|\bworld\s+war\s+(?:one|two|1|2|ii)\b|\bthe\s+(?:great\s+)?war\b"#
+);
+pattern!(
+    A_A_DIFFERENCE,
+    r#"\b(?:whats|what\s+is|what\s+was)\s+the\s+difference\b|\bdifference\s+between\b|\bhow\s+(?:do|does)\s+\w+\s+differ\b|\bhow\s+(?:is|are|was|were)\b[^?]{0,40}?\b(?:different|differs?|distinct)\s+(?:from|to|than)\b"#
+);
+pattern!(
+    A_HOW_A_THING_MEASURES,
+    r#"\bhow\s+(?:hot|cold|warm|deep|tall|high|heavy|big|large|long|wide|fast|strong)\s+(?:is|are|was|were)\s+(?!it\b|outside\b|today\b|tonight\b|this\b|the\s+weather\b)"#
+);
+pattern!(
+    A_WEATHER_HERE,
+    r#"\b(?:is|will)\s+it\s+(?:be\s+)?(?:going\s+to\s+)?(?:rain|snow|sunny|windy|hot|cold)\b|\bhow\s+(?:hot|cold|warm|windy)\s+(?:is|will)\s+it\b|\b(?:today|tonight|tomorrow|this\s+(?:week|weekend|morning|afternoon|evening)|outside|right\s+now|at\s+the\s+moment)\b"#
+);
+pattern!(A_A_TRAFFIC_LIGHT, r#"\btraffic\s+lights?\b"#);
+pattern!(
+    A_A_PLAN_ABOUT_THE_WEATHER,
+    r#"\b(?:the\s+)?weather\s+(?:plan|plans|permitting|dependent|depending)\b"#
+);
+pattern!(
+    A_HOW_MUCH_IT_HOLDS,
+    r#"\bhow\s+much\s+(?:\w+\s+){0,2}(?:does|do|is|are|will|would|should|must|can)\b[^?]{0,60}?\b(?:weigh|weighs|hold|holds|contain|contains|measure|measures|store|stores|sleep|sleeps|eat|eats|drink|drinks|feed|feeds|lift|lifts|take|takes|need|needs|use|uses|burn|burns|grow|grows|train|exercise|practise|practice|study|water|feed|give|have|put|add)\b"#
+);
+pattern!(
+    A_HOW_MUCH_IS_IN,
+    r#"\bhow\s+much\s+(?:is|are)\s+(?:there\s+)?left\b|\bhow\s+much\s+(?:is|are)\s+(?:in|left\s+in)\b|\bhow\s+much\s+(?:\w+\s+)?in\s+(?:a|an|one|the|\d)\b|\bhow\s+much\s+(?:\w+\s+){0,2}for\s+(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|twenty)\b[^?]{0,20}\b(?:people|persons?|portions?|servings?|guests?|adults?|kids?)\b|\bhow\s+much\s+(?:\w+\s+){0,2}per\s+(?:person|head|portion|serving)\b"#
+);
+pattern!(
+    A_HOW_MUCH_ENOUGH,
+    r#"\bhow\s+much\b[^?]{0,40}?\b(?:enough|too\s+much|too\s+little|of\s+it)\b|\bhow\s+much\s+of\b"#
+);
+pattern!(
+    A_HOW_MUCH_A_FEELING,
+    r#"\bhow\s+much\s+(?:do|does|did)\s+(?:you|i|we|he|she|they)\s+(?:love|care|miss)\b"#
+);
+pattern!(
+    A_AN_OCCASION_OF_THEIR_OWN,
+    r#"\b(?:what|which)\s+time\s+(?:is|are|was|were|does|do|did|will|would)\b.{0,25}?\b(?:funeral|wake|meeting|appointment|interview|scan|operation|procedure|checkup|check-up|assessment|induction|shift|session|court|hearing|viewing)\b"#
+);
+pattern!(
+    MONEY,
+    r#"\b(?:dollars?|euros?|quid|cents?|yen|rupees?|pence|money|cash)\b"#
+);
+pattern!(
+    A_A_CONVERSION,
+    r#"\bhow\s+(?:much|many)\b[^?]{0,30}?\b(?:\d+)?\s*(?:g|kg|kilos?|kilograms?|grams?|oz|ounces?|lbs?|pounds?|ml|l|millilit(?:re|er)s?|litres?|liters?|cups?|tbsp|tsp|tablespoons?|teaspoons?|celsius|fahrenheit|centigrade|degrees|stone|inches?|inch|cm|mm|metres?|meters?|feet|foot|ft|miles?|km|yards?|pints?|quarts?|gallons?)\b\s+(?:in|to|into)\s+\w"#
+);
+pattern!(
+    A_HOW_MUCH_OF_A_UNIT,
+    r#"\bhow\s+much\s+(?:is|are|was)\s+(?:a\s+|an\s+|one\s+)?[\d\w\s]{0,12}?\b(?:g|kg|kilos?|kilograms?|grams?|oz|ounces?|lbs?|ml|l|millilit(?:re|er)s?|litres?|liters?|cups?|tbsp|tsp|tablespoons?|teaspoons?|celsius|fahrenheit|centigrade|degrees|stone|inches?|inch|cm|mm|metres?|meters?|feet|foot|ft|miles?|km|yards?)\b(?!\s+of\b)"#
+);
+pattern!(
+    A_HOW_MUCH_I_SPENT,
+    r#"\bhow\s+much\s+(?:did|have|has|do)\s+(?:i|we)\s+(?:spend|spent|pay|paid|earn|earned|save|saved)\b"#
+);
+pattern!(
+    A_MY_OWN_FIGURE,
+    r#"\b(?:am|do|will|would|should|have|did|can)\s+i\s+(?:be\s+)?(?:paying|charged|billed|spending|getting\s+charged)\b|\bmy\s+(?:own\s+)?(?:bill|bills|subscription|subscriptions|account|card|statement|tariff|contract|plan|direct\s+debit|standing\s+order|invoice|receipt|payslip|quota|allowance)\b"#
+);
+pattern!(
+    A_THE_CLOCK,
+    r#"\bwhat\s+time\s+is\s+it\b|\bwhats\s+the\s+time\b"#
+);
+pattern!(
+    A_DID_YOU_SEE,
+    r#"\bdid\s+you\s+(?:see|hear|watch|read|catch|catch\s+up\s+on)\b|\bhave\s+you\s+(?:seen|heard|watched|read)\b|\bdid\s+you\s+know\b"#
+);
+pattern!(
+    A_BARE_RECORD,
+    r#"^\s*(?:(?:and|so|but|then)\s+)?(?:the|whats\s+the|what\s+is\s+the|which\s+is\s+the)?\s*(?:biggest|largest|tallest|longest|smallest|deepest|highest|oldest|fastest|richest|most\s+populous)\b"#
+);
+pattern!(
+    A_FRESHENING,
+    r#"\b(?:latest|current|newest|most\s+recent|up[\s-]to[\s-]date)\s+(?!(?:on|about|of|in|from|at|with)\b)"#
+);
+pattern!(
+    A_WORD_MEANS,
+    r#"\bwhat\s+(?:does|do|did)\b.{1,40}?\bmean\b\s*[?!.]*\s*$|\bwhats?\s+(?:is\s+)?the\s+meaning\s+of\b|\bwhat\s+is\s+(?:the\s+)?meaning\b|\bwhat\s+is\s+the\s+definition\s+of\b|\bwhat\s+do\s+you\s+mean\s+by\b|\bdefine\b"#
+);
+pattern!(
+    A_REPORTS,
+    r#"\b(?:looks?|looked|seems?|seemed|sounds?|sounded|feels?|felt|was|were|is|are|has|have|had|said|says|told|hear|heard|got|get|gets|makes?|made|turns?|turned|went|goes|coming|comes|hit|hits|does|doesnt|did|didnt|wont|cant|helps?|ruined|spoils?)\b"#
+);
+pattern!(
+    A_MY_OWN_PLAN,
+    r#"\b(?:when|what\s+time)\s+(?:(?:should|shall|do|does|can|could|will|would|must|might|had\s+better)\s+)?(?:i|we|you)\b(?!\s+(?:open|opens|close|closes|shut|shuts|serve|serves|trade|trades)\b)"#
+);
+pattern!(
+    A_DEFINITION,
+    r#"\bwhat\s+(?:is|are|was|were)\s+(?:(?:a|an|the)\s+)?(?!(?:latest|newest|current|best|worst|main|right|usual|cheapest|nearest|the|a|an|it|that|this|they|these|those)\b)\w+|\bwhat\s+does\s+\w+\s+mean\b|\bwhat\s+is\s+the\s+meaning\b|\bwhat\s+does\s+(?:a|an|the)?\s*\w+\s+do\b"#
+);
+pattern!(
+    A_BARE_TAIL,
+    r#"^(?:for|on|at|in|this|next|today|tonight|tomorrow|now|here|there|please|pls|thanks|ta|anyone|anywhere)\b"#
+);
+pattern!(
+    A_SERVICE,
+    r#"\b(?:trains?|buses?|bus|trams?|tubes?|underground|metro|flights?|ferry|ferries|coach(?:es)?|platform|departures?|arrivals?)\b|\bthe\s+\d{1,3}(?:[:.]\d{2})?(?=\s*(?:running|run|runs|leaves|leaving|departs?|departing|due|arrives?|arriving|go|goes|going|take|takes|train|bus|flight))"#
+);
+pattern!(
+    A_DAY_OR_TIME,
+    r#"\b(?:today|tonight|tomorrow|yesterday|this\s+(?:morning|afternoon|evening|weekend|week)|next\s+(?:week|weekend)|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekends?|bank\s+holiday|christmas|easter)\b|\b\d{1,2}[:.]\d{2}\b|\bo'?clock\b|\b\d{1,2}\s?(?:am|pm)\b|\bhalf\s+past\b|\bhow\s+often\b"#
+);
+pattern!(
+    ASKS_WITH_A_QUESTION_WORD,
+    r#"^\s*(?:(?:and|but|so|then|also|ok|okay|right|oh|well|now|sorry|ta|hi|hello|excuse\s+me)\s+)*(?:what|whats|what's|when|whens|where|which|who|whose|why|how|hows|how's)\b"#
+);
+pattern!(
+    ASKS_WITH_AN_AUXILIARY,
+    r#"^(?:is|are|was|were|do|does|did|can|could|will|would|shall|should|has|have|had|any|anything|anyone|anyway|tell)\b"#
+);
+pattern!(
+    ASKS_AFTER_A_COMMA_WORD,
+    r#",\s*(?:(?:and|but|so|then|also)\s+)?(?:what|whats|when|whens|where|which|who|why|how|hows)\b"#
+);
+pattern!(
+    ASKS_MID_LINE,
+    r#"\b(?:is|are|was|were|do|does|did|can|could|will|would|shall|should|am|have|has|had)\s+(?:i|we|you|they)\b"#
+);
+pattern!(
+    ASKS_AFTER_A_COMMA,
+    r#",\s*(?:(?:and|but|so|then|also)\s+)?(?:is|are|was|were|do|does|did|can|could|will|would|shall|should|am|have|has|had)\s+(?:i|you|we|they|it|he|she|there|the\s+\w+)\b"#
+);
+pattern!(
+    A_REPORTS_THE_ASK,
+    r#"^\s*(?:(?:and|but|so|then|also|well|oh|anyway)\s+)*(?:i|we|they|he|she|everyone|someone)\s+(?:already\s+|still\s+|just\s+|now\s+|never\s+|definitely\s+)?(?:know|knows|knew|told|tell|tells|said|says|explained|explains|mentioned|mentions|remember|remembers|reminded|found\s+out)\b"#
+);
+pattern!(
+    BARE_NEWS,
+    r#"^\s*(?:(?:and|so|but|then|also|ok|okay|right|oh)\s+|(?:what|how)\s+about\s+)?(?:the\s+|any\s+|got\s+any\s+)?(?:news|headlines?)\b"#
+);
+pattern!(
+    BARE_HOURS,
+    r#"^\s*(?:(?:and|so|but|then|also|ok|okay|right|oh)\s+|(?:what|how)\s+about\s+)?(?:the\s+|any\s+)?(?:opening\s+(?:hours|times)|opening|closing\s+time|bank\s+holiday\s+hours)\b"#
+);
+pattern!(
+    BARE_TIMETABLE,
+    r#"^\s*(?:(?:and|so|but|then|also|ok|okay|right|oh)\s+|(?:what|how)\s+about\s+)?(?:the\s+|any\s+)?(?:delays?|roadworks?|traffic|bus\s+times?|train\s+times?|departures|arrivals|timetable)\b"#
+);
+pattern!(
+    BARE_WEATHER,
+    r#"^\s*(?:(?:and|so|but|then|also|ok|okay|right|oh)\s+|(?:what|how)\s+about\s+)?(?:the\s+|any\s+)?(?:weather|forecast)\b"#
+);
+pattern!(
+    BARE_PRICE,
+    r#"^\s*(?:(?:and|so|but|then|also|ok|okay|right|oh)\s+|(?:what|how)\s+about\s+)?(?:the\s+|any\s+)?(?:price|prices|cost|costs|fares?|ticket\s+prices?)\b"#
+);
+pub(super) static BARE_LIVE: &[(Change, &LazyLock<Regex>)] = &[
+    (Change::News, &BARE_NEWS),
+    (Change::Hours, &BARE_HOURS),
+    (Change::Timetable, &BARE_TIMETABLE),
+    (Change::Weather, &BARE_WEATHER),
+    (Change::Price, &BARE_PRICE),
+];
+pattern!(
+    RATE,
+    r#"\b(?:interest\s+rate[s]?|exchange\s+rate[s]?|tax\s+rate[s]?|inflation|mortgage\s+rate[s]?|minimum\s+wage|price\s+cap|energy\s+cap|national\s+insurance\s+(?:rate|contribution[s]?|percent|%)|stamp\s+duty|vat|base\s+rate)\b"#
+);
+pattern!(
+    A_PRICE_ASK,
+    r#"\bhow\s+much\s+(?:is|are|was|were|will|would|does|do|did|should|can|could|might|is\s+it|do\s+they|do\s+you|do\s+i|does\s+it)\b|\bprice[sd]?\s+(?:of|for|on)\b|\bcost\s+of\b|\bwhats?\s+(?:the\s+)?(?:price|cost|charge|fare|fee|rent)\b|\bwhat\s+(?:is|are)\s+the\s+(?:price|cost|charge|fare|fee|rent)\b|\bwhat\s+(?:does|do|will|would|should)\b[^?]{0,30}?\b(?:cost|charge)\b|\bwhats?\s+(?:it|that|this|they|one)\s+worth\b|\bhow\s+much\s+(?:money|for)\b|\bcheapest\b|\bdeals?\s+on\b|\bon\s+offer\b|\bdiscount(?:s|ed)?\b|\b(?:anything|something|any|some)\s+(?:a\s+bit\s+|much\s+)?cheaper\b|\bis\s+(?:there|that|it)\s+cheaper\b|\bcheaper\s+(?:than|option|ones?|deal)\b|\bprice\s+match\b|\b(?:cheaper|more\s+expensive|dearer|pricier|costlier|better\s+value)\b|\b(?:going|market|typical|average|usual|standard|ballpark)\s+(?:rate|price|cost|fee|charge)\b"#
+);
+pattern!(
+    A_POST_HOLDER,
+    r#"\bwho(?:s|\s+is|\s+are)?\s+(?:the\s+|our\s+)?(?:prime\s+minister|pm|president|chancellor|home\s+secretary|first\s+minister|mayor|mp|meps?|ceo|chief\s+executive|head\s+teacher|manager|coach|owner|chair(?:man|woman|person)?)\b(?![^?]*\b(?:of\s+the\s+year|ever|all\s+time|alive|dead)\b)"#
+);
+pattern!(
+    A_SERVICE_STATE,
+    r#"\b(?:trains?|buses?|bus|flights?|coach(?:es)?|ferry|ferries|trams?)\b.{0,40}?\b(?:late|delayed|cancell?ed|on\s+time|on\s+strike|diverted|full\s+up)\b"#
+);
+pattern!(
+    TIMETABLE,
+    r#"\b(?:timetables?|next\s+(?:train|bus|flight|boat|ferry|coach)|departures?|arrivals?|delay(?:s|ed)?|roadworks?|bus\s+times?|train\s+times?|flight\s+times?|traffic\s+(?:report|news|today|now|on\s+the)|\bare\s+(?:the\s+)?(?:trains|buses|tubes|flights|ferries|trams)\s+running\b|\bis\s+the\s+(?:m\d+|a\d+|motorway|road|bridge|tunnel)\s+(?:closed|open|blocked)\b|what\s+time\s+(?:is|does)\s+the\s+(?:train|bus|flight))\b"#
+);
+pattern!(
+    HOURS,
+    r#"\bopening\s+(?:hours?|times?)\b|\bclosing\s+time\b|\blate\s+opening\b|\bbank\s+holiday\s+hours\b|\b(?:open|opens|closed?|closes|shuts?)\s+(?:until|till|at|on|late|early)\b|(?=[^\n]*\b(?:shops?|stores?|supermarkets?|gyms?|pools?|librar(?:y|ies)|chemists?|pharmac(?:y|ies)|surger(?:y|ies)|doctors?|dentists?|banks?|garages?|stations?|offices?|centres?|centers?|clinics?|cafes?|pubs?|restaurants?|takeaways?|chippys?|markets?|museums?|halls?|churches?|schools?|colleges?|tips?|dumps?|post\s+office|leisure\s+centre|swimming\s+pool|garden\s+centre|car\s+park)\b)(?![^\n]*\b(?:doors?|gates?|windows?|lids?|drawers?|eyes?|mouth|flaps?|valves?|caps?|tins?|jars?|boxes?)\s+(?:open|opens|closed|closes|shut|shuts)\b)(?![^\n]*\b(?:open|opens)\s+(?:to|for)\s+(?!(?:today|tonight|tomorrow|now|late|the\s+day|the\s+weekend|the\s+summer|christmas|easter)\b))\b(?:is|are|was|were|does|do|will)\s+(?:[\w']+\s+){0,4}?(?:open|opens)\s+(?:today|tonight|tomorrow|now|this\s+\w+)\b|(?=[^\n]*\b(?:shops?|stores?|supermarkets?|gyms?|pools?|librar(?:y|ies)|chemists?|pharmac(?:y|ies)|surger(?:y|ies)|doctors?|dentists?|banks?|garages?|stations?|offices?|centres?|centers?|clinics?|cafes?|pubs?|restaurants?|takeaways?|chippys?|markets?|museums?|halls?|churches?|schools?|colleges?|tips?|dumps?|post\s+office|leisure\s+centre|swimming\s+pool|garden\s+centre|car\s+park)\b)(?![^\n]*\b(?:doors?|gates?|windows?|lids?|drawers?|eyes?|mouth|flaps?|valves?|caps?|tins?|jars?|boxes?)\s+(?:open|opens|closed|closes|shut|shuts)\b)(?![^\n]*\b(?:open|opens)\s+(?:to|for)\s+(?!(?:today|tonight|tomorrow|now|late|the\s+day|the\s+weekend|the\s+summer|christmas|easter)\b))\b(?:is|are|was|were)\s+(?:[\w']+\s+){0,3}?(?:open|opens|closed|closes|shut|shuts)\b(?=\s*(?:today|tonight|tomorrow|now|this\b|on\b|at\b|until\b|till\b|late\b|for\s+the\s+day|,))|(?![^\n]*\b(?:doors?|gates?|windows?|lids?|drawers?|eyes?|mouth|flaps?|valves?|caps?|tins?|jars?|boxes?)\s+(?:open|opens|closed|closes|shut|shuts)\b)(?![^\n]*\b(?:open|opens)\s+(?:to|for)\s+(?!(?:today|tonight|tomorrow|now|late|the\s+day|the\s+weekend|the\s+summer|christmas|easter)\b))\b(?:is|are|was|were|does|do)\s+(?:the\s+|a\s+)?(?:\w+\s+){0,2}?\b(?:shops?|stores?|supermarkets?|gyms?|pools?|librar(?:y|ies)|chemists?|pharmac(?:y|ies)|surger(?:y|ies)|doctors?|dentists?|banks?|garages?|stations?|offices?|centres?|centers?|clinics?|cafes?|pubs?|restaurants?|takeaways?|chippys?|markets?|museums?|halls?|churches?|schools?|colleges?|tips?|dumps?|post\s+office|leisure\s+centre|swimming\s+pool|garden\s+centre|car\s+park)\b\s+(?:open|opens|closed|closes|shut|shuts)\b|(?![^\n]*\b(?:doors?|gates?|windows?|lids?|drawers?|eyes?|mouth|flaps?|valves?|caps?|tins?|jars?|boxes?)\s+(?:open|opens|closed|closes|shut|shuts)\b)(?![^\n]*\b(?:open|opens)\s+(?:to|for)\s+(?!(?:today|tonight|tomorrow|now|late|the\s+day|the\s+weekend|the\s+summer|christmas|easter)\b))\b(?:shops?|stores?|supermarkets?|gyms?|pools?|librar(?:y|ies)|chemists?|pharmac(?:y|ies)|surger(?:y|ies)|doctors?|dentists?|banks?|garages?|stations?|offices?|centres?|centers?|clinics?|cafes?|pubs?|restaurants?|takeaways?|chippys?|markets?|museums?|halls?|churches?|schools?|colleges?|tips?|dumps?|post\s+office|leisure\s+centre|swimming\s+pool|garden\s+centre|car\s+park)\b\s+(?:\w+\s+){0,2}?(?:open|opens|closed|closes|shut|shuts)\b(?=\s*(?:today|tonight|tomorrow|now|this\b|on\b|at\b|until\b|till\b|late\b|for\s+the\s+day|,))|(?![^\n]*\b(?:open|opens)\s+(?:to|for)\s+(?!(?:today|tonight|tomorrow|now|late|the\s+day|the\s+weekend|the\s+summer|christmas|easter)\b))\b(?:is|are|was|were)\s+(?:it|they|there(?:\s+anywhere)?|(?:the|this|that|my|our|your|any)\s+\w+|\w+)\s+open\b|\bwhat\s+times?\s+(?:does|do|is|are|will)\b|\b(?:when|what\s+times?)\b[^?]{0,30}?\b(?:open|opens|close|closes|closed|shut|shuts)\b"#
+);
+pattern!(
+    WEATHER,
+    r#"\bweather\b|\bforecast\b|\bumbrella\b|\bhow\s+(?:hot|cold|warm|windy)\s+(?:is|will)\s+it\b|\b(?:is|will)\s+it\s+(?:be\s+)?(?:going\s+to\s+)?(?:rain|snow|be\s+sunny|be\s+windy|be\s+stormy|be\s+hot|be\s+cold)\b|\bit\s+(?:is|will|should|might)\s+(?:be\s+)?(?:rain|snow|sunny|windy|stormy)\b|\bheat\s?wave\b|\bcold\s+snap\b|\btemperature\s+(?:today|tomorrow|outside)\b"#
+);
+pattern!(
+    NEWS,
+    r#"\bnews\b|\bheadlines?\b|\b(?:whats|what\s+is|what\s+was|anything|any|the\s+latest|latest|breaking|got\s+any)\s+(?:the\s+)?(?:news|headlines?)\b|\b(?:latest|update[s]?)\s+(?:on|about)\b|\b(?:news|press|newspaper)\s+stor(?:y|ies)\s+(?:on|about)\b|\b(?:the|any|more)\s+word\s+(?:on|about)\b|\bwhats\s+going\s+on\s+(?:in|at|with)\s+the\s+(?:world|news|country|city)\b|\bwhats\s+(?:happened|happening)\b|\bwhat\s+(?:is|was)\s+happening\b|\belections?\s+(?:today|tonight|this\s+(?:week|year)|results?)\b|\bwho\s+won\b|\bwho(?:s|\s+is)\s+winning\b|\bdid\s+(?:\w+\s+){0,3}win\b|\bhas\s+(?:\w+\s+){0,3}(?:won|finished|played)\b|\bthe\s+score\b|\bwhats\s+the\s+score\b|\bleague\s+table\b|\bthe\s+table\b|\bmatch\s+result\b|\b(?:the\s+)?results?\s+(?:of|from)\s+the\s+(?:match|game)\b|\btransfers?\s+(?:news|today|latest)\b"#
+);
+pattern!(
+    AVAILABILITY,
+    r#"\b(?:in\s+stock|stock\s+levels?|available|availability|unavailable|sold\s+out|vacanc(?:y|ies)|hiring|waiting\s+list|bookings?\s+(?:open|available|left|for)|(?:make|get|book|check|change|cancel|move|confirm)\s+(?:a\s+|my\s+|the\s+)?booking\b|(?:tickets?|places?|spaces?|seats?|rooms?|jobs?|appointments?)\s+(?:\w+\s+){0,2}(?:left|going|available|free)\b)"#
+);
+pattern!(
+    EVENT,
+    r#"\b(?:whats\s+on|what\s+is\s+on|anything\s+on(?!\s+(?:a|an|the|my|your|about|for)\b)|events?\s+on|gig\s+guide|show\s+times?|cinema\s+times?|fixtures?|opening\s+night|when\s+is\s+the\s+\w+\s+on\b)\b"#
+);
+pub(super) static CHANGING: &[(Change, Shape)] = &[
+    (Change::Rate, Shape::Single(&RATE)),
+    (Change::Price, Shape::Single(&A_PRICE_ASK)),
+    (Change::Post, Shape::Single(&A_POST_HOLDER)),
+    (Change::Timetable, Shape::ServiceOnDay),
+    (Change::Timetable, Shape::Single(&A_SERVICE_STATE)),
+    (Change::Timetable, Shape::Single(&TIMETABLE)),
+    (Change::Hours, Shape::Single(&HOURS)),
+    (Change::Weather, Shape::Single(&WEATHER)),
+    (Change::News, Shape::Single(&NEWS)),
+    (Change::Availability, Shape::Single(&AVAILABILITY)),
+    (Change::Event, Shape::Single(&EVENT)),
+];
+pattern!(
+    A_COUNT,
+    r#"\bhow\s+many\b|\bhow\s+far\s+is\b|\bhow\s+long\s+is\b|\bhow\s+much\b"#
+);
+pattern!(
+    A_RECORD,
+    r#"\bthe\s+(?:biggest|largest|tallest|oldest|youngest|longest|shortest|highest|lowest|deepest|shallowest|fastest|slowest|smallest|richest|poorest|wealthiest|heaviest|lightest|widest|narrowest|thinnest|strongest|busiest|rarest|commonest|most\s+common|most\s+popular|most\s+\w+|least\s+\w+)\b"#
+);
+pattern!(
+    A_WORKING,
+    r#"\bhow\s+(?:does|do)\b.{0,40}\bwork\b|\bwhy\s+(?:does|do|is|are|did)\b"#
+);
+pattern!(
+    A_HISTORY,
+    r#"\bwhen\s+(?:was|were|did)\b.*\b(?:built|invented|discovered|founded|written|composed|painted|made|begin|began|start|end|ended|happen|happened|become)\b|\bwho\s+(?:invented|discovered|founded|wrote|composed|built|painted)\b|\bhistory\s+of\b"#
+);
+pattern!(
+    A_MEASURE,
+    r#"\bhow\s+(?:tall|high|deep|wide|long|heavy|big|far)\s+is\b|\bhow\s+far\s+away\b"#
+);
+pattern!(A_MADE_OF, r#"\bmade\s+(?:of|from|out\s+of)\b"#);
+pattern!(
+    A_METHOD,
+    r#"\bhow\s+to\b|\bhow\s+(?:do|can|should)\s+(?:i|you|we)\b|\bhow\s+long\s+(?:do|does|should|to)\s+.*\b(?:cook|boil|bake|roast|keep|last|take|soak|chill|freeze)\b|\bhow\s+often\s+should\s+i\b"#
+);
+pub(super) static SETTLED: &[&LazyLock<Regex>] = &[
+    &A_COUNT,
+    &A_RECORD,
+    &A_DEFINITION,
+    &A_WORKING,
+    &A_HISTORY,
+    &A_MEASURE,
+    &A_MADE_OF,
+    &A_METHOD,
+];
