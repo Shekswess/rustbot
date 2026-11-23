@@ -1,9 +1,11 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Savings goals, contribution rates, and starting a buffer.
 
 use std::{borrow::Cow, sync::LazyLock};
 
 use fancy_regex::Regex as Lookaround;
-use jiff::{Zoned, civil::Date};
+use jiff::civil::Date;
 use regex::{Captures, Regex};
 
 use crate::bot::{Exchange, Reading, understanding::kinds::Kind};
@@ -537,7 +539,7 @@ pub(crate) fn reply(
             }
             Some(time_to_save(&text, earlier).map_or(Cow::Borrowed(SAVINGS_FALLBACK), Cow::Owned))
         }
-        "save-goal-week" => put_by(&text, earlier, Zoned::now().date()).map(Cow::Owned),
+        "save-goal-week" => put_by(&text, earlier, reading.now().date()).map(Cow::Owned),
         "savings-gap" => {
             let age = reading
                 .clean

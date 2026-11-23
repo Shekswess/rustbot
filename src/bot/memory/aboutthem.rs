@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Project a recorded whole-year age to a time the question specifies.
 
 use super::{Personal, personal::Age};
@@ -152,7 +154,7 @@ fn spoken(number: u16) -> String {
 }
 
 pub(crate) fn an_age_ahead(reading: &Reading<'_>, memory: &Memory) -> Option<String> {
-    reply_for(reading.raw, &memory.personal, || jiff::Zoned::now().year())
+    reply_for(reading.raw, &memory.personal, || reading.now().year())
 }
 
 #[cfg(test)]

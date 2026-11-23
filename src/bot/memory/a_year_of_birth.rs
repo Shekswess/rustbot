@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Derive a speaker's stated age from a year of birth.
 
 use crate::bot::{Memory, Reading, compose};
@@ -46,7 +48,7 @@ pub(crate) struct Facts {
 
 impl Facts {
     pub(crate) fn observe(&mut self, reading: &Reading<'_>) {
-        let current = || jiff::Zoned::now().year();
+        let current = || reading.now().year();
         self.observe_at(reading.raw, current);
     }
 
@@ -112,7 +114,7 @@ pub(crate) fn reply(reading: &Reading<'_>, memory: &Memory) -> Option<String> {
     let turned = memory
         .birth_facts
         .age
-        .unwrap_or_else(|| jiff::Zoned::now().year() - year);
+        .unwrap_or_else(|| reading.now().year() - year);
     if !(1..130).contains(&turned) {
         return None;
     }

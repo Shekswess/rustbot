@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: a reading gives the time of its turn. See "Changes in this fork" in README.md.
+
 mod asked_again;
 pub(crate) mod attempts;
 pub(crate) mod body;
@@ -90,6 +92,12 @@ enum Stage {
 impl<'a> Reading<'a> {
     pub(crate) fn new(raw: &'a str) -> Self {
         Self::in_context(raw, std::iter::empty(), None, &context::History::default())
+    }
+
+    /// The time of the turn that this reading belongs to: the time the bot was given with
+    /// `Bot::set_now`, or the system clock. Every reading of one turn gives the same time.
+    pub(crate) fn now(&self) -> jiff::Zoned {
+        crate::bot::clock::now()
     }
     pub(crate) fn for_inspection(raw: &'a str) -> Self {
         Self::with_line(

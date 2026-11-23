@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: the option --now sets the time. See "Changes in this fork" in README.md.
+
 use clap::Parser;
 use rustbot::{Bot, SOURCE_COMMIT, one_line};
 use rustyline::{DefaultEditor, error::ReadlineError};
@@ -37,6 +39,9 @@ struct Args {
     /// Seed the choice of wording.
     #[arg(short, long, allow_negative_numbers = true, value_name = "N", value_parser = parse_seed)]
     seed: Option<String>,
+    /// Answer as if it were this time, such as 2026-11-22T00:00:00+00:00[UTC].
+    #[arg(long, value_name = "TIME")]
+    now: Option<String>,
     /// Show which module produced the reply and how long it took.
     #[arg(short, long)]
     verbose: bool,
@@ -193,6 +198,7 @@ fn run(args: Args) -> Result<(), Box<dyn Error>> {
         io::stderr().flush()?;
     }
     let mut bot = Bot::new(args.seed.as_deref())?;
+    bot.set_now(args.now.as_deref())?;
     if args.inventory {
         let mut output = stdout.lock();
         serde_json::to_writer(&mut output, &bot.inventory()?)?;

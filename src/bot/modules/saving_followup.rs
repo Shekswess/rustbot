@@ -1,8 +1,10 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Follow-up calculations for a savings goal stated over several turns.
 
 use std::sync::LazyLock;
 
-use jiff::{Zoned, civil::Date};
+use jiff::civil::Date;
 use regex::Regex;
 
 use crate::bot::{Memory, Reading, knowledge::money_savings as savings};
@@ -532,7 +534,7 @@ fn preserve_fresh(reply: String, memory: &Memory) -> Option<String> {
 pub(crate) fn respond(reading: &Reading<'_>, memory: &Memory) -> Option<String> {
     let line = reading.raw.to_lowercase();
     let line = line.trim();
-    let now = Zoned::now().date();
+    let now = reading.now().date();
     let date = due(line, now, true);
     if date.is_none()
         && !line.bytes().any(|byte| byte.is_ascii_digit())

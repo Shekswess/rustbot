@@ -18,7 +18,9 @@ serde_json = "1"
 sha1 = { version = "0.11", default-features = false }
 unicode-normalization = "0.1"
 fancy-regex = "0.18"
-jiff = "0.2.46"
+# Changed in the cppalliance fork: the time zone database is always inside the
+# executable, so a reply never depends on the zone files of the host.
+jiff = { version = "0.2.46", features = ["tzdb-bundle-always"] }
 num-bigint = "0.4.6"
 num-rational = "0.4.2"
 num-traits = "0.2.19"

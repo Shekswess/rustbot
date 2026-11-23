@@ -1,4 +1,7 @@
+// Changed in the cppalliance fork of RustBot: a caller can set the time. See "Changes in this fork" in README.md.
+
 //! Turns follow the upstream observer → proposer → arbiter → history contract.
+pub(crate) mod clock;
 mod compose;
 pub(crate) mod knowledge;
 mod memory;
@@ -634,6 +637,8 @@ const HANDLERS: &[Hook] = &[
 pub struct Bot {
     memory: Memory,
     seed: Option<Vec<u32>>,
+    /// The time each turn reads in place of the system clock.
+    now: Option<jiff::Zoned>,
 }
 
 impl Bot {
@@ -654,8 +659,26 @@ impl Bot {
         }
     }
 
+    /// Give the bot a fixed time in place of the system clock. `None` puts the system clock back.
+    ///
+    /// The time holds a date, a time of day and a time zone, as in
+    /// `2026-11-22T00:00:00+00:00[UTC]`. Each later turn of this bot reads it wherever a rule
+    /// asks for the date or the time, so the same seed, time and conversation give the same
+    /// replies on every day. `reset` keeps the time. A time that cannot be read is an error,
+    /// and the bot keeps the time it had.
+    pub fn set_now(&mut self, now: Option<&str>) -> Result<(), String> {
+        self.now = now
+            .map(|text| {
+                clock::read(text).map_err(|error| format!("cannot read the time {text:?}: {error}"))
+            })
+            .transpose()?;
+        Ok(())
+    }
+
     /// Run one turn and append the selected reply to the session.
     pub fn turn(&mut self, text: &str) -> Turn {
+        // Each reading that this turn makes sees this one time.
+        let _time = clock::TurnTime::hold(self.now.clone());
         let mut reading = Reading::understand(
             text,
             self.memory.turns.iter().map(|t| t.user.as_str()),
@@ -980,6 +1003,135 @@ mod tests {
         assert!(turn.reply.contains("Sam"));
         bot.reset().unwrap();
         assert!(!bot.turn("what's my name?").reply.contains("Sam"));
+    }
+
+    /// A bot at seed 0 that answers as if it were `now`.
+    fn bot_at(now: &str) -> Bot {
+        let mut bot = Bot::new(Some("0")).unwrap();
+        bot.set_now(Some(now)).unwrap();
+        bot
+    }
+
+    const NOVEMBER: &str = "2026-11-22T00:00:00+00:00[UTC]";
+    const MARCH: &str = "2031-03-05T09:30:00+00:00[UTC]";
+
+    #[test]
+    fn a_set_time_reaches_a_knowledge_rule_that_reads_the_date() {
+        let ask = "When is the next full moon?";
+        let november = bot_at(NOVEMBER).turn(ask);
+        assert_eq!(november.module, Some("answers"));
+        assert!(
+            november
+                .reply
+                .starts_with("The next full moon is on Tuesday 24 November, in 2 days."),
+            "{}",
+            november.reply
+        );
+        let march = bot_at(MARCH).turn(ask);
+        assert!(
+            march
+                .reply
+                .starts_with("The next full moon is on Saturday 8 March, in 3 days."),
+            "{}",
+            march.reply
+        );
+    }
+
+    #[test]
+    fn a_set_time_reaches_a_memory_rule_that_reads_the_year() {
+        for (now, age) in [(NOVEMBER, "36"), (MARCH, "41")] {
+            let mut bot = bot_at(now);
+            bot.turn("I was born in 1990.");
+            let reply = bot.turn("How old am I?").reply;
+            assert!(reply.contains(age), "at {now}: {reply}");
+        }
+    }
+
+    #[test]
+    fn a_set_time_reaches_the_rule_that_reads_the_month() {
+        let ask = "What should I plant in the garden this month?";
+        let november = bot_at(NOVEMBER).turn(ask).reply;
+        assert!(november.starts_with("It's November"), "{november}");
+        let march = bot_at(MARCH).turn(ask).reply;
+        assert!(march.starts_with("It's March"), "{march}");
+    }
+
+    #[test]
+    fn a_set_time_gives_the_same_replies_again_and_survives_a_reset() {
+        let asks = [
+            "When is the next full moon?",
+            "What is the time difference in New York?",
+            "When do the school summer holidays start?",
+            "My last period started on 1 October. When is my due date?",
+        ];
+        let mut bot = bot_at(NOVEMBER);
+        let first: Vec<String> = asks.iter().map(|ask| bot.turn(ask).reply).collect();
+        bot.reset().unwrap();
+        let again: Vec<String> = asks.iter().map(|ask| bot.turn(ask).reply).collect();
+        assert_eq!(first, again);
+        assert_eq!(
+            first[1],
+            "New York is currently 5 hours behind the UK. It is 7pm in New York now, and 12am in the UK."
+        );
+        assert!(first[2].contains("Wednesday 21 July 2027"), "{}", first[2]);
+        assert!(
+            first[3].contains("8 July 2027") && first[3].contains("about 7 weeks pregnant today"),
+            "{}",
+            first[3]
+        );
+    }
+
+    #[test]
+    fn a_set_time_reaches_the_rule_that_recalls_how_long_ago() {
+        for (now, length) in [(NOVEMBER, "Two and a half years"), (MARCH, "Seven years")] {
+            let mut bot = bot_at(now);
+            bot.turn("We got a dog in March 2024.");
+            let reply = bot.turn("How long have we had the dog?").reply;
+            assert!(reply.starts_with(length), "at {now}: {reply}");
+        }
+    }
+
+    #[test]
+    fn a_time_that_cannot_be_read_is_an_error_and_the_bot_keeps_its_time() {
+        let mut bot = bot_at(NOVEMBER);
+        for bad in [
+            "",
+            "tomorrow",
+            "2026-11-22",
+            "2026-13-40T00:00:00+00:00[UTC]",
+        ] {
+            let error = bot.set_now(Some(bad)).unwrap_err();
+            assert!(error.contains("cannot read the time"), "{bad:?}: {error}");
+        }
+        let reply = bot.turn("When is the next full moon?").reply;
+        assert!(reply.contains("Tuesday 24 November"), "{reply}");
+    }
+
+    #[test]
+    fn a_bot_without_a_set_time_reads_the_system_clock() {
+        let ask = "What should I plant in the garden this month?";
+        let mut bot = bot_at(MARCH);
+        bot.set_now(None).unwrap();
+        // The month can turn between the reply and either look at the clock.
+        let before = jiff::Zoned::now().strftime("%B").to_string();
+        let reply = bot.turn(ask).reply;
+        let after = jiff::Zoned::now().strftime("%B").to_string();
+        assert!(
+            reply.starts_with(&format!("It's {before}"))
+                || reply.starts_with(&format!("It's {after}")),
+            "{reply}"
+        );
+    }
+
+    #[test]
+    fn two_bots_on_one_thread_keep_their_own_times() {
+        let ask = "What should I plant in the garden this month?";
+        let mut november = bot_at(NOVEMBER);
+        let mut march = bot_at(MARCH);
+        for _ in 0..2 {
+            assert!(november.turn(ask).reply.contains("November"));
+            assert!(march.turn(ask).reply.contains("March"));
+        }
     }
 
     #[test]

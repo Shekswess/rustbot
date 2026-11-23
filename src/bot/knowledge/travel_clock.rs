@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Current clocks, remembered flight times, and screening follow-ups.
 
 use std::{borrow::Cow, sync::LazyLock};
@@ -47,7 +49,7 @@ pattern!(
     r"^\s*(?:hours?|minutes?|mins?|days?|weeks?|nights?)\b"
 );
 
-static UK: LazyLock<Option<TimeZone>> = LazyLock::new(|| TimeZone::get("Europe/London").ok());
+static UK: LazyLock<Option<TimeZone>> = LazyLock::new(|| crate::bot::clock::zone("Europe/London"));
 
 fn known_place<'a>(line: &str, places: &'a [&str]) -> Option<&'a str> {
     places
@@ -236,7 +238,7 @@ fn clock_there(clean: &str, place: &str, now: Timestamp) -> Option<Cow<'static, 
         return Some(Cow::Borrowed(reply));
     }
     let here = now.to_zoned(UK.as_ref()?.clone());
-    let there = now.to_zoned(TimeZone::get(zone_name(place)?).ok()?);
+    let there = now.to_zoned(crate::bot::clock::zone(zone_name(place)?)?);
     let label = match place {
         "portugal" => "mainland Portugal".to_owned(),
         "spain" => "mainland Spain".to_owned(),
@@ -379,8 +381,12 @@ pub(super) fn registered(
 ) -> Option<Cow<'static, str>> {
     let clean = &reading.line.clean;
     match id {
-        "time-here" => clock_here(clean, earlier, Timestamp::now()),
-        "time-there" => clock_there(clean, zone_place(clean, earlier)?, Timestamp::now()),
+        "time-here" => clock_here(clean, earlier, reading.now().timestamp()),
+        "time-there" => clock_there(
+            clean,
+            zone_place(clean, earlier)?,
+            reading.now().timestamp(),
+        ),
         "my-flight-time" => Some(my_flight(clean, earlier, plans)),
         "flight-food-followup" if flight_thread(earlier) => {
             Some(Cow::Borrowed(super::TRAVEL_FLIGHT_FOOD))
@@ -401,7 +407,7 @@ mod tests {
         for &place in super::super::TRAVEL_CLOCK_PLACES {
             assert!(
                 broad_place(place).is_some()
-                    || zone_name(place).is_some_and(|zone| TimeZone::get(zone).is_ok()),
+                    || zone_name(place).is_some_and(|zone| crate::bot::clock::zone(zone).is_some()),
                 "{place}"
             );
         }
