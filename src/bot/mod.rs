@@ -669,8 +669,7 @@ impl Bot {
     pub fn set_now(&mut self, now: Option<&str>) -> Result<(), String> {
         self.now = now
             .map(|text| {
-                text.parse::<jiff::Zoned>()
-                    .map_err(|error| format!("cannot read the time {text:?}: {error}"))
+                clock::read(text).map_err(|error| format!("cannot read the time {text:?}: {error}"))
             })
             .transpose()?;
         Ok(())

@@ -6,8 +6,14 @@ use std::{
 };
 
 fn run(args: &[&str], input: &str) -> Output {
+    run_with(args, input, &[])
+}
+
+/// Runs the executable with more variables in its environment.
+fn run_with(args: &[&str], input: &str, variables: &[(&str, &str)]) -> Output {
     let mut child = Command::new(env!("CARGO_BIN_EXE_rustbot"))
         .args(args)
+        .envs(variables.iter().copied())
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
@@ -96,6 +102,40 @@ fn the_now_option_sets_the_date_that_a_reply_reads() {
             .lines()
             .all(|line| line.starts_with("The next full moon is on Saturday 8 March, in 3 days.")),
         "{replies}"
+    );
+}
+
+#[test]
+fn a_time_zone_reply_does_not_follow_the_zone_files_or_the_zone_of_the_host() {
+    // `TZDIR` names the folder where a host keeps its zone files, so an empty
+    // folder stands for a host without them. `TZ` names the zone of the host.
+    let empty = std::env::temp_dir().join(format!("rustbot-no-zones-{}", std::process::id()));
+    std::fs::create_dir_all(&empty).unwrap();
+    let args = [
+        "--seed=0",
+        "--now",
+        "2026-11-22T00:00:00+00:00[UTC]",
+        "-p",
+        "What is the time difference in New York?",
+    ];
+    let plain = run(&args, "");
+    let bare = run_with(
+        &args,
+        "",
+        &[
+            ("TZDIR", empty.to_str().unwrap()),
+            ("TZ", "Pacific/Kiritimati"),
+        ],
+    );
+    std::fs::remove_dir(&empty).unwrap();
+    assert!(plain.status.success() && bare.status.success());
+    assert_eq!(
+        String::from_utf8(plain.stdout).unwrap(),
+        "New York is currently 5 hours behind the UK. It is 7pm in New York now, and 12am in the UK.\n"
+    );
+    assert_eq!(
+        String::from_utf8(bare.stdout).unwrap(),
+        "New York is currently 5 hours behind the UK. It is 7pm in New York now, and 12am in the UK.\n"
     );
 }
 

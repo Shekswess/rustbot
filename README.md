@@ -93,7 +93,7 @@ Line counts include comments, blank lines, generated Rust, and inline tests. Rus
 
 ## Changes in this fork
 
-This repository is the [C++ Alliance](https://github.com/cppalliance) fork of [Shekswess/rustbot](https://github.com/Shekswess/rustbot). The text above is the original README. The fork starts at commit `fb89123` of the original and makes one change: a caller can set the time that the bot reads.
+This repository is the [C++ Alliance](https://github.com/cppalliance) fork of [Shekswess/rustbot](https://github.com/Shekswess/rustbot). The text above is the original README. The fork starts at commit `fb89123` of the original and makes two changes: a caller can set the time that the bot reads, and time zones come from inside the executable.
 
 Some replies hold a date or a time of day, such as the next full moon, an age worked out from a year of birth, or the time in another city. In the original, each of those replies reads the system clock, so the same seed and the same conversation give a different reply on another day. In this fork a caller gives the bot a fixed time, and those replies stay the same.
 
@@ -108,6 +108,8 @@ let reply = bot.turn("When is the next full moon?").reply;
 - Two bots in one process can hold different times, and every rule in one turn sees the same time.
 
 `src/bot/clock.rs` holds the time of a running turn. The 14 places that read the system clock now read `Reading::now`, and each changed file says so in its first line.
+
+The reply to a question about the time in another city needs the rules of time zones. The original reads them from the zone files of the host where it finds them, so a host with older or newer files, or with none, can give another reply. This fork builds the time zone database into the executable with the `tzdb-bundle-always` feature of `jiff`, and reads every zone from there. The time given to `Bot::set_now` is read with the same database.
 
 ## License
 
