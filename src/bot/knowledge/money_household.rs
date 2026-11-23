@@ -1,8 +1,10 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Household cash flow and immediate food budgeting.
 
 use std::{borrow::Cow, sync::LazyLock};
 
-use jiff::{Zoned, civil::Date};
+use jiff::civil::Date;
 use regex::Regex;
 
 use crate::bot::Reading;
@@ -362,8 +364,8 @@ fn food_bill(text: &str) -> &'static str {
 pub(crate) fn reply(id: &str, reading: &Reading<'_>) -> Option<Cow<'static, str>> {
     let text = reading.raw.to_lowercase();
     match id {
-        "make-it-last" => make_it_last(&text, Zoned::now().date()).map(Cow::Owned),
-        "money-to-last" => money_to_last(&text, Zoned::now().date()),
+        "make-it-last" => make_it_last(&text, reading.now().date()).map(Cow::Owned),
+        "money-to-last" => money_to_last(&text, reading.now().date()),
         "money-trouble" => Some(Cow::Borrowed(money_trouble(&reading.clean))),
         "food-bill" => Some(Cow::Borrowed(food_bill(&text))),
         _ => None,

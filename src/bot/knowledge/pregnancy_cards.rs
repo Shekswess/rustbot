@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Narrow source guards for pregnancy questions and dated cycles.
 
 use std::{borrow::Cow, sync::LazyLock};
@@ -36,7 +38,7 @@ pub(super) fn pregnancy_headache(_: &Reading<'_>) -> Option<Cow<'static, str>> {
     ))
 }
 
-use jiff::{Span, Zoned, civil::Date};
+use jiff::{Span, civil::Date};
 
 macro_rules! pattern {
     ($name:ident, $source:ident) => {
@@ -170,7 +172,7 @@ fn due_date_at(text: &str, today: Date) -> Option<Cow<'static, str>> {
 }
 
 pub(super) fn due_date(reading: &Reading<'_>) -> Option<Cow<'static, str>> {
-    due_date_at(&reading.line.clean, Zoned::now().date())
+    due_date_at(&reading.line.clean, reading.now().date())
 }
 
 const FOOD_GUIDANCE: &[&str] = &[

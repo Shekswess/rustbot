@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: tests of the option --now. See "Changes in this fork" in README.md.
+
 use std::{
     io::Write,
     process::{Command, Output, Stdio},
@@ -59,6 +61,51 @@ fn an_interactive_reset_clears_previous_conversation_state() {
         "{after}"
     );
     assert!(!after.contains("Sam") && !after.contains("ignored"));
+}
+
+#[test]
+fn the_now_option_sets_the_date_that_a_reply_reads() {
+    let ask = "When is the next full moon?";
+    let november = run(
+        &[
+            "--seed=0",
+            "--now",
+            "2026-11-22T00:00:00+00:00[UTC]",
+            "-p",
+            ask,
+        ],
+        "",
+    );
+    assert!(november.status.success());
+    let reply = String::from_utf8(november.stdout).unwrap();
+    assert!(
+        reply.starts_with("The next full moon is on Tuesday 24 November, in 2 days."),
+        "{reply}"
+    );
+
+    // One reply per piped line, each at the same set time.
+    let piped = run(
+        &["--seed=0", "--now=2031-03-05T09:30:00+00:00[UTC]"],
+        &format!("{ask}\n{ask}\n"),
+    );
+    assert!(piped.status.success());
+    let replies = String::from_utf8(piped.stdout).unwrap();
+    assert_eq!(replies.lines().count(), 2);
+    assert!(
+        replies
+            .lines()
+            .all(|line| line.starts_with("The next full moon is on Saturday 8 March, in 3 days.")),
+        "{replies}"
+    );
+}
+
+#[test]
+fn a_now_option_that_cannot_be_read_ends_with_an_error() {
+    let bad = run(&["--seed=0", "--now", "tomorrow", "-p", "Hello"], "");
+    assert!(!bad.status.success());
+    assert!(bad.stdout.is_empty());
+    let error = String::from_utf8(bad.stderr).unwrap();
+    assert!(error.contains("cannot read the time"), "{error}");
 }
 
 #[test]

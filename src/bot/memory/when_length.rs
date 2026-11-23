@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Recall how long ago a recorded activity or event began.
 
 use crate::bot::{Exchange, Memory, Reading};
@@ -383,7 +385,7 @@ pub(crate) fn respond(reading: &Reading<'_>, memory: &Memory) -> Option<String> 
     if !HOW_LONG_ASK.is_match(reading.raw) {
         return None;
     }
-    answer(reading.raw, &memory.turns, jiff::Zoned::now().date())
+    answer(reading.raw, &memory.turns, reading.now().date())
 }
 
 #[cfg(test)]

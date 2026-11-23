@@ -1,8 +1,9 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Month- and crop-specific garden replies from the source tables.
 
 use std::{borrow::Cow, sync::LazyLock};
 
-use jiff::Zoned;
 use regex::Regex;
 
 use crate::bot::Reading;
@@ -133,7 +134,7 @@ fn shade(reading: &Reading<'_>) -> &'static str {
 }
 
 pub(super) fn answer(rule: Rule, reading: &Reading<'_>) -> Option<Cow<'static, str>> {
-    render(rule, reading, Zoned::now().month() as u8)
+    render(rule, reading, reading.now().month() as u8)
 }
 
 fn render(rule: Rule, reading: &Reading<'_>, month_now: u8) -> Option<Cow<'static, str>> {

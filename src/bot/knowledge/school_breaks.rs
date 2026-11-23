@@ -1,7 +1,9 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! School-break replies with local calendar dates and a recent regional context.
 
 use crate::bot::{Exchange, Reading};
-use jiff::{Zoned, civil::Date};
+use jiff::civil::Date;
 use regex::Regex;
 use std::{borrow::Cow, sync::LazyLock};
 
@@ -201,7 +203,7 @@ pub(super) fn answer(
         which,
         &reading.line.clean,
         earlier.iter().map(|turn| turn.user.as_str()),
-        Zoned::now().date(),
+        reading.now().date(),
     )
 }
 

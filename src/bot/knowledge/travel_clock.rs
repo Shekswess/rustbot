@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Current clocks, remembered flight times, and screening follow-ups.
 
 use std::{borrow::Cow, sync::LazyLock};
@@ -379,8 +381,12 @@ pub(super) fn registered(
 ) -> Option<Cow<'static, str>> {
     let clean = &reading.line.clean;
     match id {
-        "time-here" => clock_here(clean, earlier, Timestamp::now()),
-        "time-there" => clock_there(clean, zone_place(clean, earlier)?, Timestamp::now()),
+        "time-here" => clock_here(clean, earlier, reading.now().timestamp()),
+        "time-there" => clock_there(
+            clean,
+            zone_place(clean, earlier)?,
+            reading.now().timestamp(),
+        ),
         "my-flight-time" => Some(my_flight(clean, earlier, plans)),
         "flight-food-followup" if flight_thread(earlier) => {
             Some(Cow::Borrowed(super::TRAVEL_FLIGHT_FOOD))

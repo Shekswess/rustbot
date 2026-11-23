@@ -1,3 +1,5 @@
+// Changed in the cppalliance fork of RustBot: the time comes from the turn. See "Changes in this fork" in README.md.
+
 //! Calendar, daylight, plant, and weather replies from the authored nature cards.
 
 use crate::{
@@ -5,7 +7,7 @@ use crate::{
     text::is_space,
 };
 use jiff::{
-    SignedDuration, Zoned,
+    SignedDuration,
     civil::{DateTime, date},
 };
 use regex::{Regex, RegexSet};
@@ -207,8 +209,8 @@ pub(super) fn fruit(reading: &Reading<'_>) -> Option<Cow<'static, str>> {
     Some(Cow::Owned(reply))
 }
 
-pub(super) fn full_moon(_: &Reading<'_>) -> Option<Cow<'static, str>> {
-    full_moon_at(Zoned::now().datetime()).map(Cow::Owned)
+pub(super) fn full_moon(reading: &Reading<'_>) -> Option<Cow<'static, str>> {
+    full_moon_at(reading.now().datetime()).map(Cow::Owned)
 }
 
 pub(super) fn full_moon_at(now: DateTime) -> Option<String> {
@@ -232,4 +234,29 @@ pub(super) fn full_moon_at(now: DateTime) -> Option<String> {
     Some(format!(
         "{lead}. Full moons come round every 29.5 days, so the one after is about four weeks later; the moon looks biggest when it is low in the sky, which is an illusion rather than the moon being closer."
     ))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn the_full_moon_reply_of_a_turn_is_the_one_for_the_time_of_its_bot() {
+        let mut replies = Vec::new();
+        for now in [
+            "2026-11-22T00:00:00+00:00[UTC]",
+            "2026-11-24T12:00:00+00:00[UTC]",
+            "2031-03-05T09:30:00+00:00[UTC]",
+        ] {
+            let mut bot = crate::bot::Bot::new(Some("0")).unwrap();
+            bot.set_now(Some(now)).unwrap();
+            let reply = bot.turn("When is the next full moon?").reply;
+            let at: jiff::Zoned = now.parse().unwrap();
+            assert_eq!(reply, full_moon_at(at.datetime()).unwrap(), "at {now}");
+            replies.push(reply);
+        }
+        assert!(replies[0].starts_with("The next full moon is on Tuesday 24 November, in 2 days."));
+        assert!(replies[1].starts_with("Tonight is a full moon."));
+        assert_ne!(replies[0], replies[2]);
+    }
 }
